@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Painting Genre Identification</title>
+    <link rel="stylesheet" href="https://unpkg.com/mvp.css">
+  </head>
+  <body>
+    <header>
+        <h1>Impressionism or Cubism?</h1>
+    </header>
+    <main>
+        <header>
+            <h2>Submit a picture of a painting</h2>
+            <p id="prediction"></p>
+            <p id="confidences"></p>
+            <p id="error"></p>
+        </header>
+        <section>
+            <img id="myImage" height="400" width="400">
+            <form id="form">
+                <label for="fileInput"></label>
+                <input id="fileInput" type="file" onchange="onFileSelected(event)" name="File">
+            </form>
+        </section>
+    </main>
+	<script src="painting_classifier.js"></script>
+  </body>
+</html>
