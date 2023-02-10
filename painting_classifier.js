@@ -74,8 +74,17 @@ function onFileSelected(event) {
 
               const label = json_response?.data[0]?.label;
 
+              const firstLabel = json_response?.data[0]?.confidences[0]?.label;
+              const firstLabelConfidence = json_response?.data[0]?.confidences[0]?.confidence
+              const secondLabel = json_response?.data[0]?.confidences[1]?.label;
+              const secondLabelConfidence = json_response?.data[0]?.confidences[1]?.confidence
+
               // show the prediction
-              predictionEl.innerHTML = `🎉 <u>Prediction: ${label}</u> 🎉` 
+              predictionEl.innerHTML = `🎉 <u>Prediction: ${label}</u> 🎉`
+              confidencesEl.innerHTML = `Confidence:<br>
+                                          ${firstLabel}: ${firstLabelConfidence}<br>
+                                          ${secondLabel}: ${secondLabelConfidence}`
+          
               errorEl.innerHTML = '';
               return;
             })
