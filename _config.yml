@@ -1,0 +1,6 @@
+remote_theme: daviddarnes/alembic@main
+plugins:
+- jekyll-remote-theme
+
+title: Pankaj Pansari's Website
+description: Bio, Projects, Blog
