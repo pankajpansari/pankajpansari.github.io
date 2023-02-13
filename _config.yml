@@ -4,3 +4,4 @@ plugins:
 
 title: Pankaj Pansari's Website
 description: Bio, Projects, Blog
+permalink: /:title/
