@@ -9,19 +9,19 @@ As a first project for my portfolio, I decided to build a simple deep learning m
 
 ## Motivation
 
-The motivation for this project came from [an online course](https://www.w3schools.io/file/markdown-links/) on deep learning which I'm currently following (particularly Chapters 1 and 2). In it, the instructor shows how to build an image classifier for a simple task - identifying whether the given image is of a dog vs a cat. He then shows how to host the model on a server and deploy it using a basic web application. I decided to adapt the process of my personal interest. I enjoy visiting art museums and looking at paintings. I thought I'd build a painting style identifier. I initially started with only two types - impressionism and cubism, because the two styles have such strong characteristics and hence are easy to distinguish by humans.
+The motivation for this project came from [an online course](https://www.w3schools.io/file/markdown-links/) on deep learning which I'm currently following (particularly Chapters 1 and 2). In it, the instructor shows how to build an image classifier for a simple task - identifying whether the given image is of a dog vs a cat. He then shows how to host the model on a server and deploy it using a basic web application. I decided to adapt the process of my personal interest. I enjoy visiting art museums and looking at paintings. I thought I'd build a painting style identifier. I initially started with only two types - [impressionism](https://en.wikipedia.org/wiki/Impressionism) and [cubism](https://en.wikipedia.org/wiki/Cubism), because the two styles have such strong characteristics and hence are easy to distinguish by humans.
 
 ## Data Collection and Processing
 
-I began the project on Google Colab using Jupyter notebook. Colab provides free GPU for our model training and Jupyter notebook is helpful for prototyping and quickly visualising results. I gathered image data using DuckDuckGo search API. I've read that Microsoft Bing API is better in terms of providing more relevant images, but needs some configuring intially. Due to this, I decided to postpone usage of Bing to a later iteration. I collected 90 images of each class - a small dataset because instead of training an image classifier from scratch, I fine-tuned a powerful model trained on a large dataset. 
+I began the project on [Google Colab](https://colab.research.google.com/drive/1v_7Yltc3fBvDRao-ithQdOeoZ5_Oqoez?usp=sharing) using Jupyter notebook. Colab provides free GPU for our model training and Jupyter notebook is helpful for prototyping and quickly visualising results. I gathered image data using DuckDuckGo search API. I've read that Microsoft Bing API is better in terms of providing more relevant images, but needs some configuring intially. Due to this, I decided to postpone usage of Bing to a later iteration. I collected 90 images of each class - a small dataset because instead of training an image classifier from scratch, I fine-tuned a powerful model trained on a large dataset. 
 
 There is some preprocessing to be done before we can use our image data:
 
-1. Image resizing - The images we've scrapped are of different sizes. However, our deep learning model exects all images in the dataset to have the same size. Image resizing can be done in multiple ways. Here I chose random cropping. On each epoch (which is one complete pass through all of our images in the dataset) we randomly select a randomly selected 224x224 patch of each image. This method has the advantage that overall, we use information from all parts of the image and do not arbitrarily distort the images. This process can also be looked as a way to augment the dataset since each image can yield muliple cropped samples.
+1. Image resizing - The images we've scrapped are of different sizes. However, our deep learning model exects all images in the dataset to have the same size. Image resizing can be done in multiple ways. Here I chose [random cropping](https://blog.roboflow.com/why-and-how-to-implement-random-crop-data-augmentation/). On each epoch (which is one complete pass through all of our images in the dataset) we randomly select a randomly selected 224x224 patch of each image. This method has the advantage that overall, we use information from all parts of the image and do not arbitrarily distort the images. This process can also be looked as a way to augment the dataset since each image can yield muliple cropped samples.
 
 2. Data augmentation - To increase the size of the dataset and to make our model our robust, each image can be flipped, rotated, warped and have brightness and contrast changed.
 
-Both of these above functionalities are provided by the fastai library. fastai is a high-level Python library for deep learning built on top of PyTorch that makes the whole process of data cleaning, training and testing easier and faster. 
+Both of these above functionalities are provided by the [fastai library](https://docs.fast.ai/). fastai is a high-level Python library for deep learning built on top of PyTorch that makes the whole process of data cleaning, training and testing easier and faster. 
 
 ## Model Training
 
@@ -37,7 +37,7 @@ I also tested the model on a couple of hand-picked images and visualized the res
 
 ## Deployment as a Web Application
 
-I exported and saved the model from the Colab notebook. I used Gradio to demo my model as a web app. It wraps a python function into a user interface and allows us to launch the demos inside jupyter notebooks. The model was hosted on Hugging Face Spaces.
+I exported and saved the model from the Colab notebook. I used [Gradio](https://www.gradio.app/) to demo my model as a web app. It wraps a python function into a user interface and allows us to launch the demos inside jupyter notebooks. The model was hosted on [Hugging Face Spaces](https://huggingface.co/docs/hub/spaces).
 
 Finally to create the web application, I used javascript that accepts the uploaded image, calls the gradio function for inference, and displays the returned results.
 
