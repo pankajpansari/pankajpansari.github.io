@@ -1,19 +1,26 @@
 ---
 title: "About"
-image: profile.jpg
+image: ./images/profile_pic.jpg
 about:
   template: jolla
   links:
-    - icon: twitter
-      text: Twitter
-      href: https://twitter.com
+    - icon: kaggle
+      text: Kaggle
+      href: https://www.kaggle.com/pankajpansari
     - icon: linkedin
       text: LinkedIn
-      href: https://linkedin.com
+      href: https://www.linkedin.com/in/pankajpansari/ 
     - icon: github
       text: Github
-      href: https://github.com
+      href: https://github.com/pankajpansari
 
 ---
+**A little about me**: My name is Pankaj Pansari. I'm a researcher in machine learning and combinatorial optimization. Previously, I was a Research Scientist at Naver Labs Europe in Grenoble, France. In the past, I've been a data analyst with General Electric in Bangalore, India.
 
-About this blog
+I completed my PhD under Dr M. Pawan Kumar Mudigonda in the OVAL group at University of Oxford. I was an undergraduate student at the Indian Institute of Technology, Kharagpur.
+    
+**Curriculum Vitae**: [pdf](https://drive.google.com/file/d/1zUeKOpfbXN-PrG_wB3hQ3pnLN-12hY8h/view?usp=drive_link)
+
+**Email**: pankaj.pansari1@proton.me
+
+
