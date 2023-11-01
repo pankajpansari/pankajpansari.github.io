@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Pankaj Pansari">
+<meta name="dcterms.date" content="2023-11-01">
 
-<title>Blog</title>
+<title>Blog - Machine Learning in Research versus Production</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +25,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -61,50 +61,19 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
     <nav class="navbar navbar-expand-lg navbar-dark ">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Blog</span>
     </a>
   </div>
@@ -115,7 +84,7 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html" rel="" target="">
+    <a class="nav-link" href="../../about.html" rel="" target="">
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -138,125 +107,98 @@ ul.task-list li input[type="checkbox"] {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page">
-      <h1 class="title">Blog</h1>
+    <div class="quarto-title column-body">
+      <h1 class="title">Machine Learning in Research versus Production</h1>
                       </div>
   </div>
     
   
   <div class="quarto-title-meta">
 
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Pankaj Pansari </p>
+            </div>
+    </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">November 1, 2023</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
+<p>I have been going through the book ‘Designing Machine Learning Systems’ by Chip Huyen to better understand how machine learning systems are deployed in production in industry. Coming from a research background, it’s been a good experience to learn the difference in emphasis and priorities between how machine learning is practised in research versus in production. Here, I summarize some of my learnings on this topic:</p>
+<section id="stakeholders-and-requirements" class="level3">
+<h3 class="anchored" data-anchor-id="stakeholders-and-requirements">1. Stakeholders and Requirements</h3>
+<p><strong>Research:</strong> The number of stakeholders on a research project is small and they are usually aligned in terms of the project objective. The objective is often to achieve state-of-the-art performace on benchmark datasets. Model complexity is usually not an issue if it helps to eke out a tiny percentage of improvement on peformance metrics.</p>
+<p><strong>Production:</strong> There are often many stakeholders and their requirements can often be different and conflicting. It’s usually not possible to design an ML system satisfying all requirements, so a compromise must be reached. The value of performance is case-dependent. At times, a tiny improvement can save a lot of money for a business. However, often a small improvement does not justify the increase in model complexity.</p>
+</section>
+<section id="computational-priorities" class="level3">
+<h3 class="anchored" data-anchor-id="computational-priorities">2. Computational Priorities</h3>
+<style>
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
+<figure class="figure">
+<img src="fig_1.png" class="center figure-img" alt="A figure" width="650" height="250">
+<figcaption class="figure-caption">
+Model development code is a small part of the full codebase needed for deployment. Adapted from Sculley et al. <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>
+<figcaption class="figure-caption">
+</figcaption></figcaption></figure>
+<p><strong>Research:</strong> A research group focuses most of its effort on model development. Due to the need to train many different models, research prioritizes fast training. In other words, high throughput is the desired quality in the ML system where throughput is the number of samples that can be processed by the system in unit time.</p>
+<p><strong>Production:</strong> When deploying a model in production, the surrounding infrastructure of data pipelines, resource management, and servers has to be constructed and this takes a lot of time and effort. Once deployed, the focus is now of fast inference. Hence, we seek low latency in this case where latency is the amount of average waiting time before a sample/query is processed.</p>
+</section>
+<section id="data" class="level3">
+<h3 class="anchored" data-anchor-id="data">3. Data</h3>
+<p><strong>Research:</strong> The benchmark datasets in research are usually clean, static, and well-formatted. The anomalies in the dataset, if present, are usually known and often open-source code to process the datasets are available.</p>
+<p><strong>Production</strong> By contrast, data in real-world systems can be noisy, unstructured, and its distribution can shift with time. There may be bias in the data. Labels may be sparse, imbalanced, or incorrect. The data may not be available as a complete dataset but may arrive over time as a stream as it gets generated by the user. Finally, one has to respect user privacy when dealing with their data.</p>
+</section>
+<section id="fairness" class="level3">
+<h3 class="anchored" data-anchor-id="fairness">4. Fairness</h3>
+<p><strong>Research:</strong> Fairness is rarely given consideration in a research setting where the agenda is achieving state-of-the-art accuracy. Even when fairness is considered, it is an afterthought. This also has to do with lack of meaningful fairness metrics.</p>
+<p><strong>Production:</strong> A machine learning system deployed in the real-world can have influence on society members based on the decisions it outputs. Giving strong emphasis to fairness can ensure that no section of society gets adversely affected by ML models and that possible sources of bias have been dealt with. Unfortunately, much progress remains to be done on this front as a lot of models deployed for loan applications, predictive policity, employee recruitement still discriminate against minority groups.</p>
+</section>
+<section id="interpretability" class="level3">
+<h3 class="anchored" data-anchor-id="interpretability">5. Interpretability</h3>
+<p><em>Interpretability</em> is the property of an ML system to explain the rationale behind the decision it makes or the output it gives. If a system is interpretable, one can peek inside the model for better understanding; in case there is some mistake/anomaly, one can pinpoint with confidence where the model is going wrong and debug accordingly.</p>
+<p><strong>Research:</strong> With ML research being evaluated on a single objective, that of model performace, there is no incentive to ensure that the model is interpretable.</p>
+<p><strong>Production:</strong> Intrepretability is a key requirement for real-world ML systems. For us to deploy an ML system in society, we need to be able to trust it. This trust is highly dependent on the system being interpretable.In case of misbehavior, we want to be able to diagnose and rectify our model.</p>
+</section>
+<section id="monitoring-and-maintenance" class="level3">
+<h3 class="anchored" data-anchor-id="monitoring-and-maintenance">6. Monitoring and Maintenance</h3>
+<p><strong>Research:</strong> In research, one often focuses solely on the model development part. The benchmark dataset is static. There is no monitoring to be done once good results on the benchmark dataset have been achieved. Advances in software and hardware, and accumulated common wisdom have made this process relative fast and cheap.</p>
+<p><strong>Production:</strong> The deployment of ML systems is still relatively fast. Once deployed, an ML system needs to be constantly monitored and maintained and this is the hard part. There are some aspects of ML systems that make them much more challenging to monitor and maintain as compared to traditional software systems, particularly the dependece of model performance on external data <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. At a high level, one needs to constantly ensure that the data pipeline does not get broken, the incoming data is sensible, and the test data distribution does not differ considerably from training distribution. In case of distribution drift, one needs to retrain the model.</p>
 
 
+</section>
 
 
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-date-sort="1698777000000" data-listing-file-modified-sort="1698841863663" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
-<div class="thumbnail">
-<p><a href="./posts/ML-research-vs-production/index.html"> <p class="card-img-top"><img src="posts\ML-research-vs-production\fig_1.png" alt="A figure"  class="thumbnail-image card-img"/></p> </a></p>
-</div>
-<div class="body">
-<a href="./posts/ML-research-vs-production/index.html">
-<h3 class="no-anchor listing-title">
-Machine Learning in Research versus Production
-</h3>
-<div class="listing-subtitle">
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
-</div>
-<div class="listing-description">
-I have been going through the book ‘Designing Machine Learning Systems’ by Chip Huyen to better understand how machine learning systems are deployed in production in…
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/ML-research-vs-production/index.html">
-<div class="listing-date">
-Nov 1, 2023
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-listing-date-sort="1698604200000" data-listing-file-modified-sort="1698830038944" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12">
-<div class="thumbnail">
-<p><a href="./posts/LLM-intro/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
-</div>
-<div class="body">
-<a href="./posts/LLM-intro/index.html">
-<h3 class="no-anchor listing-title">
-An Introduction to Large Language Models
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-Large language models (LLMs) are very large deep learning models that aim to predict and generate sensible text in a natural or symbolic…
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/LLM-intro/index.html">
-<div class="listing-date">
-Oct 30, 2023
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-listing-date-sort="1676226600000" data-listing-file-modified-sort="1698749316263" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5">
-<div class="thumbnail">
-<p><a href="./posts/Painting-classifier/index.html"> <div class="listing-item-img-placeholder card-img-top" >&nbsp;</div> </a></p>
-</div>
-<div class="body">
-<a href="./posts/Painting-classifier/index.html">
-<h3 class="no-anchor listing-title">
-A Simple Painting Style Classifier
-</h3>
-<div class="listing-subtitle">
-
-</div>
-<div class="listing-description">
-As a first project for my portfolio, I decided to build a simple deep learning model which can classify paintings based on their styles. As of now, the model supports only…
-</div>
-</a>
-</div>
-<div class="metadata">
-<a href="./posts/Painting-classifier/index.html">
-<div class="listing-date">
-Feb 13, 2023
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+<ol>
+<li id="fn1"><p>Sculley, David, et al.&nbsp;“Hidden technical debt in machine learning systems.” Advances in neural information processing systems 28 (2015).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Sculley, David, et al.&nbsp;“Hidden technical debt in machine learning systems.” Advances in neural information processing systems 28 (2015).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

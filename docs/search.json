@@ -4,7 +4,7 @@
     "href": "index.html",
     "title": "Blog",
     "section": "",
-    "text": "An Introduction to Large Language Models\n\n\n\n\n\n\n\n\n\n\n\n\nOct 30, 2023\n\n\nPankaj Pansari\n\n\n\n\n\n\n  \n\n\n\n\nA Simple Painting Style Classifier\n\n\n\n\n\n\n\n\n\n\n\n\nFeb 13, 2023\n\n\nPankaj Pansari\n\n\n\n\n\n\nNo matching items"
+    "text": "Machine Learning in Research versus Production\n\n\n\n\n\n\n\n\n\n\n\n\nNov 1, 2023\n\n\nPankaj Pansari\n\n\n\n\n\n\n  \n\n\n\n\nAn Introduction to Large Language Models\n\n\n\n\n\n\n\n\n\n\n\n\nOct 30, 2023\n\n\nPankaj Pansari\n\n\n\n\n\n\n  \n\n\n\n\nA Simple Painting Style Classifier\n\n\n\n\n\n\n\n\n\n\n\n\nFeb 13, 2023\n\n\nPankaj Pansari\n\n\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "posts/LLM-intro/index.html",
@@ -103,5 +103,19 @@
     "title": "A Simple Painting Style Classifier",
     "section": "Further Work",
     "text": "Further Work\nI tried extending this model to identify more types of painting styles. I’m not an art expert, so after some online research I decided to use 9 different painting styles that are considered the most important. Despite trying various different training parameters, I couldn’t get the final model to be accurate enough.\nA visualisation of the images where the model performed poorly revealed that some of the images scrapped via the DuckDuckGo API were irrelevant and had to be removed. fastai provides a way for us to remove these irrelevant data via a GUI interface. I did this and still the accuracy was poor. I began to suspect that the images returned in response to search queries didn’t actually belong to the right styles. All of this suggested that I needed a better way to build up a cleaner and more accurate dataset. However, this process is going to be time-consuming and hence I’ve decided to postpone it for a later iteration."
+  },
+  {
+    "objectID": "posts/ML-research-vs-production/index.html",
+    "href": "posts/ML-research-vs-production/index.html",
+    "title": "Machine Learning in Research versus Production",
+    "section": "",
+    "text": "I have been going through the book ‘Designing Machine Learning Systems’ by Chip Huyen to better understand how machine learning systems are deployed in production in industry. Coming from a research background, it’s been a good experience to learn the difference in emphasis and priorities between how machine learning is practised in research versus in production. Here, I summarize some of my learnings on this topic:"
+  },
+  {
+    "objectID": "posts/ML-research-vs-production/index.html#footnotes",
+    "href": "posts/ML-research-vs-production/index.html#footnotes",
+    "title": "Machine Learning in Research versus Production",
+    "section": "Footnotes",
+    "text": "Footnotes\n\n\nSculley, David, et al. “Hidden technical debt in machine learning systems.” Advances in neural information processing systems 28 (2015).↩︎\nSculley, David, et al. “Hidden technical debt in machine learning systems.” Advances in neural information processing systems 28 (2015).↩︎"
   }
 ]
