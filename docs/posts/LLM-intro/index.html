@@ -9,7 +9,7 @@
 <meta name="author" content="Pankaj Pansari">
 <meta name="dcterms.date" content="2023-10-30">
 
-<title>Blog - An Introduction to Large Language Models (LLMs)</title>
+<title>Blog - An Introduction to Large Language Models</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -110,7 +110,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">An Introduction to Large Language Models (LLMs)</h1>
+      <h1 class="title">An Introduction to Large Language Models</h1>
                       </div>
   </div>
     
@@ -148,45 +148,45 @@ ul.task-list li input[type="checkbox"] {
 <div style="text-align: justify">
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">1. Introduction</h2>
-<p>Large language models (LLMs) are very large deep learning models that aim to predict and generate sensible text in a natural human language <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. LLMs, in other words, are trained to model human language and even symbolic language such as code. We say that LLMs are trained for the task of language modeling.</p>
-<p>We call models that can generate any form of content as generative models, eg model to generate images, videos, or music. Since LLMs generate text, they are also generative models.</p>
-<p>In this blog post, we look at what differentiates LLMs from earlier language models (LMs), will briefly review the architecture and training strategies, and explain why they have been astoundingly successful at a wide variety of language tasks. We defer a detailed discussion of more fundamental technical topics such as language modeling, embeddings, and Transformer models to latter blog posts.</p>
+<p>Large language models (LLMs) are very large deep learning models that aim to predict and generate sensible text in a natural or symbolic human language. LLMs, in other words, are trained to model human language and even symbolic language such as code. We say that LLMs are trained for the task of language modeling.</p>
+<p>We call models that can generate any form of content as generative models; for examples, models to generate images, videos, or music. Since LLMs generate text, they are also generative models.</p>
+<p>In this blog post, we look at the difference between LLMs and earlier language models (LMs), we briefly review the architecture and training strategies for LLMs, and explain why they have been astoundingly successful at a wide variety of language tasks. We defer a detailed discussion of more fundamental technical topics such as language modeling, embeddings, and Transformer models to latter blog posts.</p>
 </section>
 <section id="background" class="level2">
 <h2 class="anchored" data-anchor-id="background">2. Background</h2>
 <section id="language-modeling" class="level3">
 <h3 class="anchored" data-anchor-id="language-modeling">2.1 Language Modeling</h3>
-<p>The essence of tasks such as translating text, answering questions, having a chat is learning how to model human language. In a narrow sense, an LM is a probabilistic model that assigns a probability <span class="math display">\[ P(w_1, w_2, \dots, w_n) \]</span> to every finite sequence <span class="math inline">\(w_1, \dots, w_n\)</span> (grammatical or not). This joint probability can be represented in terms of conditional probabilities as:</p>
-<p><span class="math display">\[ P(w_1, w_2, \dots, w_n) = P(w_1) \times P(w_2|w_1) \times P(w_3|w_1, w_2) \dots \times P(w_n|w_1, w_2, \dots, w_{n-1})\]</span></p>
-<p>Hence, for the sentence “I am going to the market”</p>
-<p><span class="math display">\[P(\text{I am going to the market}) = P(\text{I}) \times P(\text{am|I}) \times P(\text{going|I am}) \times P(\text{to|I am going}) \]</span> <span class="math display">\[\times P(\text{the|I am going to}) \times P(\text{market|I am going to the})\]</span></p>
-<p>Hence, a LM needs to learn these conditional probabilities for many different groups of words and phrases. With a large text dataset at hand, this aim can be formulated as a machine learning task in two ways:</p>
+<p>The essence of tasks such as text translation, question-answering, making a chatbot is learning how to model human language. An LM is basically a probabilistic model that assigns a probability <span class="math display">\[ P(w_1, w_2, \dots, w_n) \]</span> to every finite sequence of words <span class="math inline">\(w_1, \dots, w_n\)</span> (grammatical or not). This joint probability can be represented in terms of conditional probabilities as</p>
+<p><span class="math display">\[ P(w_1, w_2, \dots, w_n) = P(w_1) \times P(w_2|w_1) \times P(w_3|w_1, w_2) \dots \times P(w_n|w_1, w_2, \dots, w_{n-1}).\]</span></p>
+<p>Hence, for the sentence “I am going to the market”, we have</p>
+<p><span class="math display">\[P(\text{I am going to the market}) = P(\text{I}) \times P(\text{am|I}) \times P(\text{going|I am}) \times P(\text{to|I am going}) \]</span> <span class="math display">\[\times P(\text{the|I am going to}) \times P(\text{market|I am going to the}).\]</span></p>
+<p>Hence, an LM needs to learn these conditional probabilities for many different groups of words and phrases. With a large text dataset at hand, this aim can be formulated as a machine learning task in two ways:</p>
 <ul>
-<li>prediction of next word in the text given the previous words/phrases in a sentence</li>
+<li>prediction of next word in the text given the previous words/phrases in a sentence; for example,</li>
 </ul>
-<p>The cat jumped off the ____</p>
+<p>The cat jumped off the ____.</p>
 <ul>
-<li>prediction of masked words or phrases given the rest of the words in the sentence (called <em>masked language modeling</em>)</li>
+<li>prediction of masked words or phrases given the rest of the words in the sentence (called <em>masked language modeling</em>); for example,</li>
 </ul>
 <p>The cat ____ off the wall.</p>
-<p>Hence, the system creates its own prediction challenges from the text corpus. This learning paradigm where we don’t provide explicit training labels is called <em>self-supervised learning</em>. Since we do away with the need for expensive labeling, use of large unlabeled datasets becomes possible. The concept is used not just in the domain of NLP, but for computer vision as well.</p>
-<p>Prediction of masked/next word(s) is powerful because doing it well calls for different kinds of understanding; every form of linguistic and world knowledge from grammar, sentence structure, word meaning, and facts help one to perform this task better. In performing language modeling, a model gathers a wide understanding of language and the world represented in the training corpus.</p>
+<p>Hence, the system creates its own prediction challenges from the text corpus. This learning paradigm where we don’t provide explicit training labels is called <em>self-supervised learning</em>. Since we do away with the need for expensive labeling, use of large unlabeled text datasets, scraped from the Web, becomes possible. The concept is used not just in the domain of NLP, but for computer vision as well.</p>
+<p>Prediction of masked/next word(s) is powerful because doing it well calls for different kinds of understanding; every form of linguistic and world knowledge from grammar, sentence structure, word meaning, to facts help one to perform this task better. In performing language modeling, a model gathers a wide understanding of language and the world represented in the training corpus.</p>
 </section>
 <section id="transformers" class="level3">
 <h3 class="anchored" data-anchor-id="transformers">2.1 Transformers</h3>
 <p>Transformers are NLP models that take in text (a sequence of words) and output another text to perform some task such as translation or question-answering.</p>
 <section id="embeddings" class="level4">
 <h4 class="anchored" data-anchor-id="embeddings">2.1.1. Embeddings</h4>
-<p>Embeddings represent words by a position in a real-valued vector space, whose dimension can be in hundreds or thousands. The similarity of words and syntax depends on proximity in this space.</p>
+<p>An embedding represents a word by a position in a real-valued vector space whose dimension can be in hundreds or thousands. The similarity of words and syntax depends on proximity of respective embeddings in this space.</p>
 <section id="encoder-decoder-models" class="level5">
-<h5 class="anchored" data-anchor-id="encoder-decoder-models">2.1.2. Encoder Decoder Models</h5>
-<p>The Transformer, at a high level, consists of two main components - an encoder and a decoder. The encoder takes in the word embeddings and transforms them by a sequence of operations to produce another set of ‘encoded’ embeddings. In each operation of that sequence, we allow the embeddings of all words to ‘talk to’ and influence each other. The effect is that the new set of ‘encoded embeddings’ encapsulate higher-level context of the sentence.</p>
+<h5 class="anchored" data-anchor-id="encoder-decoder-models">2.1.2. Encoder-Decoder Models</h5>
+<p>The Transformer, at a high level, consists of two main components - an encoder and a decoder. The encoder takes in the word embeddings and transforms them by a sequence of operations to produce another set of ‘encoded’ embeddings. In each operation of that sequence, we allow the embeddings of all words to ‘interact’ and influence each other. The effect is that the new set of ‘encoded embeddings’ encapsulates higher-level context of the sentence.</p>
 <p>The decoder takes in the set of embedded vectors to produce a sequence of real-valued vectors. Once we pass this sequence through a linear layer and softmax, we obtain the desired output.</p>
 </section>
 </section>
 <section id="self-attention" class="level4">
 <h4 class="anchored" data-anchor-id="self-attention">2.1.3. Self-attention</h4>
-<p>An key feature of Transformer models is their use of <em>attention</em> during the encoding and decoding phases. Attention-layers are special architecture features that are present in encoder and decoder which enable the model to pay specific attention to certain words in the input sentence when trying to form a representation of each word.</p>
+<p>An key feature of Transformer models is their use of <em>attention</em> during the encoding and decoding phases. Attention layers are special architectural features that are present in encoder and decoder. In encoder, they enable the model to pay specific attention to certain words in the input sentence when trying to form a representation of each word. In decoder, they enable the model to pay attention to already produced output when generating the next output word.</p>
 <p>It’s clear that interpretation of words and phrases is context dependent and depends on the remaining words/phrases in the sentences. Crucially, we only need a few context words, and not the whole sentence, to determine the meaning/representation of a particular word. For example, the meaning of the word <em>bat</em> in <em>Cricket is played with a bat</em> can be inferred by looking at <em>Cricket</em> and that in <em>Bats are nocturnal creatures</em> by looking at <em>creatures</em>.</p>
 <p>Attention also lends itself to parallel computation, thereby boosting the speed at which powerful NLP models can be trained on GPUs.</p>
 </section>
@@ -194,14 +194,14 @@ ul.task-list li input[type="checkbox"] {
 </section>
 <section id="large-language-models" class="level2">
 <h2 class="anchored" data-anchor-id="large-language-models">3. Large Language Models</h2>
-<p>Models which are trained on broad data (generally using self-supervision) that can be adapted to a wide range of downstream tasks are called <em>foundation models</em>. Large language models are a specific type of foundation models for NLP tasks and make use of the Transformer architecture we discussed above. Some examples of LLMs are BERT, GPT-3, and CLIP.</p>
-<p>Though LLMs are based on the already established ideas of deep learning and self-supervised learning, it is the scale of these models and the datasets on which they are trained that make possible astonishing performance on a wide variety of tasks. This scale is made possible by improvements in computer hardware (GPU and memory), development of novel Transformer architecture, and the availability of huge datasets. Self-supervised learning is important to the ability to use huge data, since annotation is not required in this case.</p>
-<p>The significance of foundation models lies in two concepts: <em>emergence</em> and <em>homogenization</em>. <em>Emergence</em> means that foundation models with their billions of parameters can be adapted to a wide variety tasks, through mere textual description of the task (prompts); that is, they are able to do <em>in-context learning</em> for many tasks for which they were neither trained nor anticipated to be used for. <em>Homogenization</em> means that there exists a handful of powerful base foundation models, such as BERT or T5, from which almost all state-of-the-art NLP models are derived through fine-tuning.</p>
+<p>A machine learning model trained on vast quantity of data at scale (generally using self-supervision) can be adapted to a wide range of downstream tasks; such a model is called a <em>foundation model</em>. Large language models are a specific type of foundation model for NLP tasks and they make use of the Transformer architecture we discussed above. Some examples of LLMs are BERT, GPT-3, and T5.</p>
+<p>Though LLMs are based on the already established ideas of deep learning and self-supervised learning, it is the scale of these models and the datasets on which they are trained that make possible the astonishing performance on a wide variety of tasks. This scale is facilitated by improvements in computer hardware (GPU and memory), development of novel Transformer architecture, and the availability of huge datasets. Self-supervised learning is important to the ability to use huge data, since annotation is not required in this case.</p>
+<p>The significance of foundation models lies in two concepts: <em>emergence</em> and <em>homogenization</em>. <em>Emergence</em> means that the foundation models with their billions of parameters can be adapted to a wide variety of tasks, through mere textual description of the task (prompts); that is, they are able to do <em>in-context learning</em> for many tasks for which they were neither trained nor anticipated to be used for. <em>Homogenization</em> means that there exists a handful of powerful base foundation models, such as BERT or T5, from which almost all state-of-the-art NLP models are derived through fine-tuning.</p>
 <section id="types-of-llms" class="level3">
 <h3 class="anchored" data-anchor-id="types-of-llms">3.1 Types of LLMs</h3>
 <p>The original Transformer architecture consists of two parts - encoder and decoder. Depending on the task at hand, researchers use either of the parts or both, giving rise to three types of LLMs:</p>
 <ol type="1">
-<li><p><strong>Encoder-only LLMs</strong> (eg. BERT) - This variant uses only the encoder part. It is designed to produce dense embeddings for the input word sequence. While pretraining using masked word prediction, one attaches an un-embedding layer, which produces one-hot encoded words. For downstream tasks, we remove the un-emdedding layer. A small model is trained on top of the encoder-only model making use of the embeddings. Such models are most suitable for tasks like missing word prediction and document classification.</p></li>
+<li><p><strong>Encoder-only LLMs</strong> (eg. BERT) - This variant uses only the encoder part. It is designed to produce dense embeddings for the input word sequence. While pretraining using masked word prediction, one attaches an un-embedding layer, which produces one-hot encoded words. For downstream tasks, we remove the un-emdedding layer. A small task-specific model is trained on top of the encoder-only model making use of the embeddings. Such models are most suitable for tasks like missing word prediction and document classification.</p></li>
 <li><p><strong>Decoder-only LLMs</strong> (eg. GPT) - This variant uses only the decoder part of the Transformer. It is mainly used for text generation (output) from a given prompt (input). The input sequence or prompt is first encoded to a single large embedding from which the decoder outputs a sequence of words in an auto-regressive manner. <em>Auto-regression</em> means while generating a word, the model can refer to the previously generated words.</p></li>
 <li><p><strong>Encoder-decoder (eg. T5)</strong> - This uses both encoder and decoder parts, making such a model quite large. It is used for tasks like language translation.</p></li>
 </ol>
@@ -210,13 +210,13 @@ ul.task-list li input[type="checkbox"] {
 <section id="training-llms" class="level3">
 <h3 class="anchored" data-anchor-id="training-llms">3.2 Training LLMs</h3>
 <p>LLMs typically follow the paradigm of pretraining and transfer learning.</p>
-<p><strong>Pretrainingng</strong> - via self-supervised learning on a large textual corpus such as Wikipedia or GitHub. The resulting model is called <em>pre-trained language model</em> (PLM) and it can be adapted to a wide variety of downstream tasks. This is the part which takes a huge amount of training time and compute resources due to the size of the model and training data.</p>
+<p><strong>Pretraining</strong> - via self-supervised learning on a large textual corpus such as Wikipedia or GitHub. The resulting model is called <em>pre-trained language model</em> (PLM) and it can be adapted to a wide variety of downstream tasks. This is the part which takes a huge amount of training time and compute resources due to the size of the model and training data.</p>
 <p><strong>Transfer learning</strong> - adapting the model to a specific task. Since the PLM has already acquired a lot of language and factual knowledge, this step needs a tiny amount of data and compute. This can be done via:</p>
 <ol type="1">
 <li><p><strong>Fine-tuning</strong> - The parameters of PLM are adjusted by training with additional data relevant to the application. These can be of 3 types:</p>
 <ol type="a">
-<li><p>Unsupervised: Suppose one is building a programming co-pilot using PLMs. The standard PLMs are usually pre-trained on internet text such as Wikipedia. We can now fine-tune them on code text.</p></li>
-<li><p>Supervised: PLMs are pre-trained for next or masked word prediction. If we want to use them for, let’s say, document sentiment analysis, we need to replace the output layer with a new one and train it with input-output pairs of text and associated sentiment.</p></li>
+<li><p>Unsupervised: Suppose one is building a programming co-pilot using PLMs. The standard PLMs are usually pre-trained on internet text such as Wikipedia. We can now fine-tune them on code text, again using self-supervised learning.</p></li>
+<li><p>Supervised: PLMs are pre-trained for next or masked word prediction. If we want to use them for, let’s say, document sentiment analysis, we need to replace the output layer with a new one and train it with input-output pairs of texts and the associated sentiments.</p></li>
 <li><p>Reinforcement Learning from Human Feedback (RLHF): This approach, mainly used by text generation models, consists of repeated execution of the following:</p>
 <ul>
 <li>The model is given a prompt and it generates multiple plausible answers.</li>
@@ -232,20 +232,20 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="challenges-and-research-directions">4. Challenges and Research Directions</h2>
 <section id="multi-modality-and-environment-interaction" class="level3">
 <h3 class="anchored" data-anchor-id="multi-modality-and-environment-interaction">4.1 Multi-modality and Environment Interaction</h3>
-<p>New research in the direction of foundation models trained on data from different modalities such as video and audio. By augmenting learning with multiple sensory data and knowledge, we provide stronger learning signals and increase learning speed.</p>
-<p>Embodied foundation models - system situated in an environment where it can interact with other agents and objects. This can help the model learn cause and effect like humans by means of physically interacting with surroundings.</p>
+<p>A lot of research work is being done currently on training foundation models using data from different modalities such as video and audio. By augmenting learning with multiple sensory data and knowledge, we provide stronger learning signals and increase learning speed.</p>
+<p>One can also situate the foundation model in an environment where it can interact with other agents and objects; such models are called <em>embodied foundation models</em>. This can help the model learn cause and effect like humans by means of physically interacting with surroundings.</p>
 </section>
 <section id="understanding-and-intelligence" class="level3">
 <h3 class="anchored" data-anchor-id="understanding-and-intelligence">4.2 Understanding and Intelligence</h3>
-<p>The impressive performance of LLMs on a wide variety of tasks, even on ones they were not trained for, has given rise to debates about whether or not these models are actually learn language in the way humans do <a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> or whether they are just elaborate rewriting systems devoid of meaning.</p>
+<p>The impressive performance of LLMs on a wide variety of tasks, even on ones they were not trained for, has given rise to debates about whether or not these models are actually learn language in the way humans do <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> or whether they are just elaborate rewriting systems devoid of meaning.</p>
 <p>The first position seems partly convincing because state-of-the-art LLMs remain susceptible to unpredictable and unhumanlike intelligence. Sometimes LLMs generate text and responses that seem syntactically correct and natural but in reality they are incorrect factually - this is called <em>hallucination</em>.</p>
-<p>On the other hand, researchers argue that given the variety and difficulty of tasks multi-modal foundation models like GPT-4 can solve, we can confidently say they exhibit aspects of intelligence<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. There’s been some recent work on understanding in-context learning which posits that perhaps these large foundation models have smaller machine-learning models inside them that the big model can train to perform a new task<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. Clearly, some aspects of LLM behavior indeed seem intelligence, but not exactly in human way; this calls for a rethinking and expansion of the meaning of intelligence.</p>
+<p>On the other hand, researchers argue that given the variety and difficulty of tasks multi-modal foundation models like GPT-4 can solve, we can confidently say they exhibit aspects of intelligence<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. There’s been some recent work on understanding in-context learning which posits that perhaps these large foundation models have smaller machine-learning models inside them that the big model can train to perform a new task<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. Clearly, some aspects of LLM behavior indeed seem intelligent, but not exactly in human way; this calls for a rethinking and expansion of the meaning of intelligence.</p>
 </section>
 <section id="alignment" class="level3">
 <h3 class="anchored" data-anchor-id="alignment">4.3 Alignment</h3>
-<p><em>Alignment</em> refers to the process of ensuring that LLMs behave in harmony with human values and preferences. An <em>aligned</em> LLM is trustworthy. The characteristics needed for an LLM to be used with trust in the real-world are reliability, safety, fairness, resistance to misuse, explainability, and robustness <a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>. Out of these, here we only consider fairness.</p>
-<p><strong>Fairness</strong> - We don’t understand the biases encapsulated in these models nor have an estimate of safety for use in critical applications, since the datasets and models are huge. Homogenization is also a liability, since all derived NLP models may inherit the same harmful biases of a few foundation models. This calls for investing significant resources into curating and documenting LM training data.</p>
-<p>Another concern is that with more widespread use of LLMs, more content on the web is likely to be LLM-generated. When future models are trained on web data, bias is likely to be propagated and the models can become less capable - a phenomenon known as <em>model collapse</em> <a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
+<p><em>Alignment</em> refers to the process of ensuring that LLMs behave in harmony with human values and preferences. An <em>aligned</em> LLM is trustworthy. The characteristics needed for an LLM to be used with trust in the real-world are reliability, safety, fairness, resistance to misuse, explainability, and robustness <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. Out of these, here we only consider fairness.</p>
+<p><strong>Fairness</strong> - Due to the huge size of training data and LLMs, we don’t clealy understand the biases encapsulated in these models nor have an estimate of safety for use in critical applications. Homogenization is also a liability, since all derived NLP models may inherit the same harmful biases of a few foundation models. This calls for investing significant resources into curating and documenting LLM training data.</p>
+<p>Another concern is that with more widespread use of LLMs, more content on the web is likely to be LLM-generated. When future models are trained on web data, bias is likely to be propagated and the models can become less capable - a phenomenon known as <em>model collapse</em> <a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</p>
 </section>
 </section>
 </div>
@@ -256,12 +256,11 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
 
 <ol>
-<li id="fn1"><p>The language can be artificial, symbolic as well, such as software code.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn2"><p>Bender, Emily M., et al.&nbsp;“On the dangers of stochastic parrots: Can language models be too big?🦜.” Proceedings of the 2021 ACM conference on fairness, accountability, and transparency. 2021.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn3"><p>Bubeck, Sébastien, et al.&nbsp;“Sparks of artificial general intelligence: Early experiments with gpt-4.” arXiv preprint arXiv:2303.12712 (2023).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn4"><p>Akyürek, Ekin, et al.&nbsp;“What learning algorithm is in-context learning? investigations with linear models.” arXiv preprint arXiv:2211.15661 (2022).<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn5"><p>Liu, Yang, et al.&nbsp;“Trustworthy LLMs: a Survey and Guideline for Evaluating Large Language Models’ Alignment.” arXiv preprint arXiv:2308.05374 (2023).<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-<li id="fn6"><p>Shumailov, Ilia, et al.&nbsp;“The Curse of Recursion: Training on Generated Data Makes Models Forget” arXiv preprint 2305.17493<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn1"><p>Bender, Emily M., et al.&nbsp;“On the dangers of stochastic parrots: Can language models be too big?🦜.” Proceedings of the 2021 ACM conference on fairness, accountability, and transparency. 2021.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Bubeck, Sébastien, et al.&nbsp;“Sparks of artificial general intelligence: Early experiments with gpt-4.” arXiv preprint arXiv:2303.12712 (2023).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Akyürek, Ekin, et al.&nbsp;“What learning algorithm is in-context learning? investigations with linear models.” arXiv preprint arXiv:2211.15661 (2022).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Liu, Yang, et al.&nbsp;“Trustworthy LLMs: a Survey and Guideline for Evaluating Large Language Models’ Alignment.” arXiv preprint arXiv:2308.05374 (2023).<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Shumailov, Ilia, et al.&nbsp;“The Curse of Recursion: Training on Generated Data Makes Models Forget” arXiv preprint 2305.17493<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 </ol>
 </section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
