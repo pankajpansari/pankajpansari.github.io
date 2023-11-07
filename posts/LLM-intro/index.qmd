@@ -5,6 +5,14 @@ author: "Pankaj Pansari"
 ---
 
 <div style="text-align: justify"> 
+<style>
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
+
 
 ## 1. Introduction
 
@@ -31,11 +39,15 @@ Hence, an LM needs to learn these conditional probabilities for many different g
 
 - prediction of next word in the text given the previous words/phrases in a sentence; for example, 
 
-The cat jumped off the ____.
+<figure>
+    <img src="fig1.png" class="center" alt="A figure" width = "350" height = "200">
+</figure>
 
 - prediction of masked words or phrases given the rest of the words in the sentence (called *masked language modeling*); for example, 
 
-The cat ____ off the wall.
+<figure>
+    <img src="fig2.png" class="center" alt="A figure" width = "400" height = "200">
+</figure>
 
 Hence, the system creates its own prediction challenges from the text corpus. This learning paradigm where we don't provide explicit training labels is called *self-supervised learning*. Since we do away with the need for expensive labeling, use of large unlabeled text datasets, scraped from the Web, becomes possible. The concept is used not just in the domain of NLP, but for computer vision as well.
 

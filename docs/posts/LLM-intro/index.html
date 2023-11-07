@@ -146,6 +146,13 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div style="text-align: justify">
+<style>
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
 <section id="introduction" class="level2">
 <h2 class="anchored" data-anchor-id="introduction">1. Introduction</h2>
 <p>Large language models (LLMs) are very large deep learning models that aim to predict and generate sensible text in a natural or symbolic human language. LLMs, in other words, are trained to model human language and even symbolic language such as code. We say that LLMs are trained for the task of language modeling.</p>
@@ -164,11 +171,15 @@ ul.task-list li input[type="checkbox"] {
 <ul>
 <li>prediction of next word in the text given the previous words/phrases in a sentence; for example,</li>
 </ul>
-<p>The cat jumped off the ____.</p>
+<figure class="figure">
+<img src="fig1.png" class="center figure-img" alt="A figure" width="350" height="200">
+</figure>
 <ul>
 <li>prediction of masked words or phrases given the rest of the words in the sentence (called <em>masked language modeling</em>); for example,</li>
 </ul>
-<p>The cat ____ off the wall.</p>
+<figure class="figure">
+<img src="fig2.png" class="center figure-img" alt="A figure" width="400" height="200">
+</figure>
 <p>Hence, the system creates its own prediction challenges from the text corpus. This learning paradigm where we don’t provide explicit training labels is called <em>self-supervised learning</em>. Since we do away with the need for expensive labeling, use of large unlabeled text datasets, scraped from the Web, becomes possible. The concept is used not just in the domain of NLP, but for computer vision as well.</p>
 <p>Prediction of masked/next word(s) is powerful because doing it well calls for different kinds of understanding; every form of linguistic and world knowledge from grammar, sentence structure, word meaning, to facts help one to perform this task better. In performing language modeling, a model gathers a wide understanding of language and the world represented in the training corpus.</p>
 </section>
