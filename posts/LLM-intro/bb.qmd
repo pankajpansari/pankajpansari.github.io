@@ -1,0 +1,70 @@
+---
+title: A Probabilistic Perspective on Regularization 
+date:  "2023-11-08"
+author: "Pankaj Pansari"
+---
+
+Regularization is a common technique in machine learning to prevent overfitting. The two most widely used regularizers are the L2 and L1 norms. In this post, we look at how there regularizers can be thought of as being derived from prior distributions on the parameters we're estimating.
+
+# Background
+
+We are going to make extensive use of the Bayes' theorem. Let $w$ be the parameter we want to estimate and ${\mathcal D} = (x_1, y_1), (x_2, y_2), \dots, (x_N, y_N)$ be the dataset. Then, we have:
+
+$$P(w|{\mathcal D}) = \frac{P({\mathcal D}|w) \cdot P(w)}{P({\mathcal D})}.
+$$
+
+In the above equation, 
+
+* $P(w)$ is the *prior distribution* on the parameters $w$; this encodes our belief about what the parameter values should likely be before we have looked at any data.
+* $P(\mathcal{D}|w)$ is the *likelihood* of $\mathcal{D}$ given some assignment of $w$.
+* $P(w|\mathcal{D})$ is the *posterior distribution* of the parameters $w$ after the dataset $\mathcal D$ is known.
+
+Let's say we want to estimate parameter $w$ from an observed dataset $\mathcal D$. We assume the relation between $x$ and $y$ as
+
+$$y = f(x ; w) + \epsilon$$
+
+where $\epsilon$ is noise drawn from a Gaussian distribution with mean $0$ and variance $\sigma^2$. This results in a Gaussian likelihood:
+
+$$P({\mathcal D}|w) = {\mathcal N}(y|f(x ; w), \sigma^2)$$
+
+Let us assume that the samples in $\mathcal D$ are independently and identically distributed (i.i.d). Under this assumption and taking logarithms for ease of computation, the likelihood value now becomes: 
+
+$$\log P({\mathcal D}|w) = \sum_{i = 1}^{N} \log {\mathcal N}(y_i|f(x_i ; w), \sigma^2).$$
+
+We can estimate parameter $w$ by maximizing the above quantity. This is called *maximum likelihood estimation* (MLE). Often time, this method of estimating $w$ is called a *frequentist approach*, in constrast to the *Bayesian approach* we discuss below.
+
+# L2 Regularization
+
+We note that the denominator in the Bayes' theorem does not depend on the parameters $w$ we want to estimate; hence we can ignore that term. We define the unnormalized posterior distribution as
+
+$$P'(w|{\mathcal D}) = P({\mathcal D}|w) \cdot P(w)$$.
+
+Let us now see what happens when we introduce prior distribution on parameter $w$. In the first case, let us assume that $w$ follows a Gaussian distribution ${\mathcal N}(w|0, \lambda^{-1})$ where $\lambda$ is a strictly positive scalar. We then have:
+
+$$P'(w|{\mathcal D}) = \prod_{i = 1}^{N} {\mathcal N}(y_i|f(x_i ; w), \sigma^2) \cdot {\mathcal N}(w|0, \lambda^{-1})$$.
+
+Taking logarithm on both sides, we obtain:
+
+$$log P'(w|{\mathcal D}) = \sum_{i = 1}^N \log {\mathcal N}(y_i|f(x_i ; w), \sigma^2) - \lambda w^2 + \text{const}.$$
+
+We can now see how our selection of prior for $w$ as normal distribution results in L2 regularization. In the above equation, $w^2$ is the squared L2-norm of the vector $w$ with $\lambda$ controlling the strength of regularization.
+
+Often, we seek only a point estimate of $w$ instead of the full posterior distribution. One solution is to take the mode of this posterior as the estimate of $w$; this approach is called *maximum a posteriori* (MAP) estimation. MAP estimation differs from MLE in the fact that we incorporate prior knowledge about $w$.
+
+# L1 Regularization
+
+We'll first need to look at a distribution called the Laplace distribution. With $w$ as the random variable, it is given by
+
+$$ g(w|\mu, b) = \frac{1}{2b} \exp\left(-\frac{|w - \mu|}{b}\right)$$
+
+and $\mu, b$ are referred to as *location parameter* and *diversity* respectively. 
+
+Now let us assume that the prior distribution on $w$ is a Laplace distribution with location parameter $\mu = 0$ and $b = \lambda^{-1}$. The unnormalized posterior distribution in this case becomes:
+
+$$P'(w|{\mathcal D}) = \prod_{i = 1}^{N} {\mathcal N}(y_i|f(x_i ; w), \sigma^2) \cdot \frac{\lambda}{2} \exp\left(-\lambda |w|\right).$$
+
+Taking logarithm on both sides,
+
+$$log P'(w|{\mathcal D}) = \sum_{i = 1}^N \log {\mathcal N}(y_i|f(x_i ; w), \sigma^2) - \lambda \cdot |w| + \text{const}.$$
+
+Hence with Laplace distribution as prior on $w$, we arrive at L1 regularization. Again, $\lambda$ controls the strength of regualarization.

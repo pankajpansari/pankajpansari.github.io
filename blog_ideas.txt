@@ -1,6 +1,4 @@
 1. Curse of high dimensions
 2. Positive semi-definite matrices
-3. Gaussian prior as L2, Laplace prior as L1
-4. Maximum Likelihood, MAP estimate (Bayesian?), Posterior distribution over parameters (Bayesian)
 5. Use of VAEs in Stable Diffusion
 6. Vector Quantization
