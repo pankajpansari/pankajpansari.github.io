@@ -22,5 +22,8 @@
   },
   "posts/LLM-intro/bb.qmd": {
     "bb.html": "d48de8d3"
+  },
+  "posts/Bayesian-inference/index.qmd": {
+    "index.html": "5f1df604"
   }
 }

@@ -6,7 +6,7 @@ author: "Pankaj Pansari"
 
 Regularization is a common technique in machine learning to prevent overfitting. The two most widely used regularizers are the L2 and L1 norms. In this post, we look at how there regularizers can be thought of as being derived from prior distributions on the parameters we're estimating.
 
-# Background
+## 1. Background
 
 We are going to make extensive use of the Bayes' theorem. Let $w$ be the parameter we want to estimate and ${\mathcal D} = (x_1, y_1), (x_2, y_2), \dots, (x_N, y_N)$ be the dataset. Then, we have:
 
@@ -33,7 +33,7 @@ $$\log P({\mathcal D}|w) = \sum_{i = 1}^{N} \log {\mathcal N}(y_i|f(x_i ; w), \s
 
 We can estimate parameter $w$ by maximizing the above quantity. This is called *maximum likelihood estimation* (MLE). Often time, this method of estimating $w$ is called a *frequentist approach*, in constrast to the *Bayesian approach* we discuss below.
 
-# L2 Regularization
+## 2. L2 Regularization
 
 We note that the denominator in the Bayes' theorem does not depend on the parameters $w$ we want to estimate; hence we can ignore that term. We define the unnormalized posterior distribution as
 
@@ -51,7 +51,7 @@ We can now see how our selection of prior for $w$ as normal distribution results
 
 Often, we seek only a point estimate of $w$ instead of the full posterior distribution. One solution is to take the mode of this posterior as the estimate of $w$; this approach is called *maximum a posteriori* (MAP) estimation. MAP estimation differs from MLE in the fact that we incorporate prior knowledge about $w$.
 
-# L1 Regularization
+## 3. L1 Regularization
 
 We'll first need to look at a distribution called the Laplace distribution. With $w$ as the random variable, it is given by
 
