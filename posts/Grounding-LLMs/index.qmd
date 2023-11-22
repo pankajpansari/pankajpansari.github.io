@@ -1,0 +1,44 @@
+---
+title: Grounding Language Models in the Physical World 
+date: "2023-11-22"
+author: "Pankaj Pansari"
+---
+
+<div style="text-align: justify"> 
+<style>
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
+
+I recently listened to a [podcast](https://www.therobotbrains.ai/copy-of-jitendra-malik) episode on The Robot Brains where Jitendra Malik, an eminent computer vision researcher, shared his thoughts and experiences on grounding large language models (LLMs) in the physical world and how to approach this through robotics. I summarize the discussion below:
+
+1. **Moravec's Paradox**
+
+Moravec wrote in 1988, "it is comparatively easy to make computers exhibit adult level performance on intelligence tests or playing checkers, and difficult or impossible to give them the skills of a one-year-old when it comes to perception and mobility" [^1].
+
+LLMs have shown enormous success recently on a wide variety of cognitive tasks. Among other benchmark tests, these systems have done well on challenging competitive exams. This gives us a feeling that these systems have acquired impressive intelligence. However, this holds true for tasks involving abstract, higher-level cognition. The challenging problems of locomotion and other desirable motor skills in robotics have not become solved as a result of this progress on LLMs. We seem to be still consistent with Moravec's Paradox.
+
+2. **Evolutionary Perspective** 
+
+On our human evolution journey, brain development followed the development of hands with opposable thumb; hand development in turn followed the development of bipedal walking which left our hands free. We developed sensorimotor skills first, language acquisition is a more recent phenomenon. If we think of human evolution on a 24-hour timeframe, langugage development corresponds only to the final 2-3 minutes. Clearly, all of intelligence cannot be said to reside in those final couple of minutes. Besides, different species of animals have different flavours of intelligence, and these are sophisticated in many cases. These animals do not possess language ability in the conventional sense. Hence, what we can learn from language alone may be inherently limited.
+
+3. **Human Learning and Development**
+
+We can take inspiration from how babies and children learn. Babies interact with the world around them in a multi-modal way, using different senses. They gradually learn to manipulate objects and perform small experiments of their own. The acquisition of words at this stage is grounded in physical objects and interactions with them. So for instance when a mother says 'this is a ball', there is a visual input of the ball along with the motor desire to throw or catch a ball.
+
+When children go to school after the age of 5 and acquire knowledge through books, they already have a basic understanding of the world, people, and objects on which to build upon. This points to the need for a multi-modal and staged process of learning (*curriculum learning*).
+
+4. **Embodied AI**
+
+A new paradigm of intelligent models can be robots equipped with vision, touch, audio sensors with the ability to move, manipulate objects and interact with the real-world. As the robot learns more about the dynamics of the world, we can teach it basics of language. The rest of langugage acquisition will happen in an in-context manner, by combining atomic concepts, much like children do after age 5.
+
+5. **Rapid Adaptation of Motor Skills**
+
+There is a compelling argument for this approach of acquiring atomic concepts that are grounded in the world followed by general language acquisition and development of abstract thinking. Any robotic system needs to be adaptable and robust. For instance, a robot must be able to walk on diverse, unseen terrains. The robot must be capable of learning new policies quickly, with the time-frame being task dependent. For example, a walking robot needs to learn to stabilize on a new terrain in about a second else the robot will fall. Just like humans need only a handful of examples to pick up a new concept, we can hope our ML systems modeled on lines of human learning and development, will be able to quickly adapt with a small number of simulations/trial and error.
+
+[^1]: Wikipedia contributors. "Moravec's paradox." Wikipedia.
+
+
