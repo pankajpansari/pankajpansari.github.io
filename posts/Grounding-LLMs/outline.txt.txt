@@ -1,0 +1,36 @@
+Podcast: Jitendra Malik on Building AI from the ground up
+https://www.youtube.com/watch?v=k_Wrd1kI1B0
+https://www.therobotbrains.ai/copy-of-jitendra-malik
+
+A. Grounding LLMs
+
+1. Modern LLMs trained directly on language
+2. Evolutionary brain development for humans followed the development of hand with opposable thumb which followed
+development of bipedal walking leaving our hands free. We developed sensorimotor skills first; language development is 
+a more recent phenomenon
+3. Similarly in children, before the age of 5 children learn through sight, touch, manipulation of objects; acquisition of
+words at this stage is grounded in objects; when mother says 'get the ball' there is a visual input of the ball and 
+there is motor desire to throw or catch a ball.
+4. One approach can be to have a robot with sensors (vision, touch, audio) and ability to move, manipulate objects
+and interact with the real-world. As the robot learns more about the dynamics of the real-world, we can look teach is
+language basics. The rest of language acquisition will happen in an in-context way, by combining atomic concepts; much like
+children do after the age of 5.
+4. However, development of AI in computers does not necessarily have to follow the same trajectory as humans and children.
+General language acquisition skills can come first, and grounding of word concepts to real-world can come later. Experiments will reveal which is the better approach.
+
+B. Rapid Motor Adaptation
+
+1. Generalization for ML - system makes good predictions for unknown data. Counterpart for robots is being able to function, let's say walk,
+in diverse, unseen terrains.
+2. There is need to be able to learn new policies quickly; the time-scale is task-dependent; 
+for walking the robot needs to learn to stabilize on a new terrain in about a second, else the robot will fall. Hence, rapid motor adaption.
+3. The approach is different from classical adaptive control theory, since we can't write down system dynamics mathematically because of how complex they are
+4. Different from Boston Dynamics, since they had to engineer their systems for various terrains involving a lot of time and expertise.
+We seek here a single neural network that learns by itself the various policies through intelligent trial and errors.
+5. A lot of rollouts are required to make a robot learn any motor skill; this is analogous to humans. Adults take it for granted but
+children fall a lot while walking.
+6. Simulations are very valuable in this learning task. They benefit from Moore's laws, so quality gets better with time. Having good
+diversity in simulations is a challenge. Simulations and real-world experiments should go hand-in-hand; a feeback loop. When we discover
+aspects of the real-world where the robot does not work well, we improve the simulator to capture that aspect.
+
+Look for Jitendra's online videos to know more.

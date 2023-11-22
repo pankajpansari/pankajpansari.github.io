@@ -157,7 +157,7 @@ ul.task-list li input[type="checkbox"] {
 <h2 class="anchored" data-anchor-id="introduction">1. Introduction</h2>
 <p>Large language models (LLMs) are very large deep learning models that aim to predict and generate sensible text in a natural or symbolic human language. LLMs, in other words, are trained to model human language and even symbolic language such as code. We say that LLMs are trained for the task of language modeling.</p>
 <p>We call models that can generate any form of content as generative models; for examples, models to generate images, videos, or music. Since LLMs generate text, they are also generative models.</p>
-<p>In this blog post, we look at the difference between LLMs and earlier language models (LMs), we briefly review the architecture and training strategies for LLMs, and explain why they have been astoundingly successful at a wide variety of language tasks. We defer a detailed discussion of more fundamental technical topics such as language modeling, embeddings, and Transformer models to latter blog posts.</p>
+<p>In this blog post, we look at the difference between LLMs and earlier language models (LMs), we briefly review the architecture and training strategies for LLMs, and explain why they have been astoundingly successful at a wide variety of language tasks. We defer a detailed discussion of more fundamental technical topics such as language modeling, embeddings, and Transformer models to later blog posts.</p>
 </section>
 <section id="background" class="level2">
 <h2 class="anchored" data-anchor-id="background">2. Background</h2>
@@ -173,14 +173,20 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <figure class="figure">
 <img src="fig1.png" class="center figure-img" alt="A figure" width="350" height="200">
+<figcaption class="figure-caption">
+Fig. 1 - Next word prediction
+</figcaption>
 </figure>
 <ul>
 <li>prediction of masked words or phrases given the rest of the words in the sentence (called <em>masked language modeling</em>); for example,</li>
 </ul>
 <figure class="figure">
 <img src="fig2.png" class="center figure-img" alt="A figure" width="400" height="200">
+<figcaption class="figure-caption">
+Fig. 2 - Masked word prediction
+</figcaption>
 </figure>
-<p>Hence, the system creates its own prediction challenges from the text corpus. This learning paradigm where we don’t provide explicit training labels is called <em>self-supervised learning</em>. Since we do away with the need for expensive labeling, use of large unlabeled text datasets, scraped from the Web, becomes possible. The concept is used not just in the domain of NLP, but for computer vision as well.</p>
+<p>Hence, the system creates its own prediction challenges from the text corpus. This learning paradigm where we don’t provide explicit training labels is called <em>self-supervised learning</em>. Since we do away with the need for expensive labeling, use of large unlabeled text datasets, scraped from the Web, becomes possible. The concept is used not just in the domain of natural language processing (NLP), but for computer vision as well.</p>
 <p>Prediction of masked/next word(s) is powerful because doing it well calls for different kinds of understanding; every form of linguistic and world knowledge from grammar, sentence structure, word meaning, to facts help one to perform this task better. In performing language modeling, a model gathers a wide understanding of language and the world represented in the training corpus.</p>
 </section>
 <section id="transformers" class="level3">
@@ -188,11 +194,22 @@ ul.task-list li input[type="checkbox"] {
 <p>Transformers are NLP models that take in text (a sequence of words) and output another text to perform some task such as translation or question-answering.</p>
 <section id="embeddings" class="level4">
 <h4 class="anchored" data-anchor-id="embeddings">2.1.1. Embeddings</h4>
-<p>An embedding represents a word by a position in a real-valued vector space whose dimension can be in hundreds or thousands. The similarity of words and syntax depends on proximity of respective embeddings in this space.</p>
+<p>An embedding represents a word by a position in a real-valued vector space whose dimension can be in hundreds or thousands. The proximity of embeddings of two different words in this space in an indication of their semantic similarity.</p>
+<figure class="figure">
+<img src="fig3.png" class="center figure-img" alt="A figure" width="400" height="250">
+<figcaption class="figure-caption">
+Fig. 3 - Schematic representations of embeddings in 2-dimension. Normally embeddings have many more dimensions.
+</figcaption>
+</figure>
 <section id="encoder-decoder-models" class="level5">
 <h5 class="anchored" data-anchor-id="encoder-decoder-models">2.1.2. Encoder-Decoder Models</h5>
 <p>The Transformer, at a high level, consists of two main components - an encoder and a decoder. The encoder takes in the word embeddings and transforms them by a sequence of operations to produce another set of ‘encoded’ embeddings. In each operation of that sequence, we allow the embeddings of all words to ‘interact’ and influence each other. The effect is that the new set of ‘encoded embeddings’ encapsulates higher-level context of the sentence.</p>
 <p>The decoder takes in the set of embedded vectors to produce a sequence of real-valued vectors. Once we pass this sequence through a linear layer and softmax, we obtain the desired output.</p>
+<figure class="figure">
+<img src="fig4.png" class="center figure-img" alt="A figure" width="600" height="250">
+<figcaption class="figure-caption">
+Fig. 4 - Encoder-decoder model.
+</figcaption></figure>
 </section>
 </section>
 <section id="self-attention" class="level4">
@@ -257,9 +274,9 @@ ul.task-list li input[type="checkbox"] {
 <p><em>Alignment</em> refers to the process of ensuring that LLMs behave in harmony with human values and preferences. An <em>aligned</em> LLM is trustworthy. The characteristics needed for an LLM to be used with trust in the real-world are reliability, safety, fairness, resistance to misuse, explainability, and robustness <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. Out of these, here we only consider fairness.</p>
 <p><strong>Fairness</strong> - Due to the huge size of training data and LLMs, we don’t clealy understand the biases encapsulated in these models nor have an estimate of safety for use in critical applications. Homogenization is also a liability, since all derived NLP models may inherit the same harmful biases of a few foundation models. This calls for investing significant resources into curating and documenting LLM training data.</p>
 <p>Another concern is that with more widespread use of LLMs, more content on the web is likely to be LLM-generated. When future models are trained on web data, bias is likely to be propagated and the models can become less capable - a phenomenon known as <em>model collapse</em> <a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</p>
-</section>
-</section>
-</div>
+</section></section></div>
+
+
 
 
 
