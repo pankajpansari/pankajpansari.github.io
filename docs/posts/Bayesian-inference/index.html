@@ -148,6 +148,27 @@ ul.task-list li input[type="checkbox"] {
 <p>Regularization is a common technique in machine learning to prevent overfitting. The two most widely used regularizers are the L2 and L1 norms. In this post, we look at how there regularizers can be thought of as being derived from prior distributions on the parameters we’re estimating.</p>
 <section id="background" class="level2">
 <h2 class="anchored" data-anchor-id="background">1. Background</h2>
+<section id="model-complexity" class="level3">
+<h3 class="anchored" data-anchor-id="model-complexity">Model Complexity</h3>
+<p>Our intuition is that simpler models are preferable; models that are excessively complicated lead to overfitting. Let <span class="math inline">\(L_{\mathcal D}({\bf w})\)</span> measure the misfit of model with parameters <span class="math inline">\(\bf w\)</span> to a given dataset <span class="math inline">\(\mathcal D\)</span>. We can augment the loss function to penalize more complex models:</p>
+<p><span class="math display">\[ L({\bf w}) = L_{\mathcal D}({\bf w}) + \lambda L_{reg}(\bf w)\]</span></p>
+<p>This is called <em>regularization</em> in machine learning and <em>shrinkage</em> in statistics. <span class="math inline">\(\lambda\)</span> is called the <em>regularization coefficient</em> and controls the trade-off between fitting the dataset <span class="math inline">\(\mathcal D\)</span> well and giving simpler, more generalizable model.</p>
+<p>There are two ways to think of model complexity:</p>
+<ul>
+<li>model complexity as a function of weights of all the features in a model</li>
+</ul>
+<p>A feature weight with a high absolute value is more complex than a feature weight with low absolute value. In this case,</p>
+<p><span class="math display">\[L_{reg}({\bf w}) = {\bf w}^T{\bf w} = ||{\bf w}||^2 = w_1^2 + w_2^2 + \dots + w_n^2\]</span></p>
+<p>This is known as <em>L2 regularization</em> or <em>weight decay</em>. Optimizing loss function with L2 regularization is generally easier and results in small parameter values. The resulting model is known as <em>ridge regression</em>.</p>
+<ul>
+<li>model complexity as a function of the total number of features with nonzero weights</li>
+</ul>
+<p>To achieve this, we don’t set our regularization penaly as the number of nonzero parameters - this makes the optimization difficult. Instead, we use <em>L1 regularization</em>:</p>
+<p><span class="math display">\[L_{reg}({\bf w}) = ||{\bf w}||_1^2 = |w_1| + |w_2| + \dots + |w_n|\]</span></p>
+<p>This has the same effect of setting only some parameter values to be nonzero, and is convex hence easier to optimize. The resulting model is known as <em>Lasso</em>.</p>
+</section>
+<section id="maximum-likelihood-estimation" class="level3">
+<h3 class="anchored" data-anchor-id="maximum-likelihood-estimation">Maximum Likelihood Estimation</h3>
 <p>We are going to make extensive use of the Bayes’ theorem. Let <span class="math inline">\(w\)</span> be the parameter we want to estimate and <span class="math inline">\({\mathcal D} = (x_1, y_1), (x_2, y_2), \dots, (x_N, y_N)\)</span> be the dataset. Then, we have:</p>
 <p><span class="math display">\[P(w|{\mathcal D}) = \frac{P({\mathcal D}|w) \cdot P(w)}{P({\mathcal D})}.
 \]</span></p>
@@ -159,11 +180,12 @@ ul.task-list li input[type="checkbox"] {
 </ul>
 <p>Let’s say we want to estimate parameter <span class="math inline">\(w\)</span> from an observed dataset <span class="math inline">\(\mathcal D\)</span>. We assume the relation between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> as</p>
 <p><span class="math display">\[y = f(x ; w) + \epsilon\]</span></p>
-<p>where <span class="math inline">\(\epsilon\)</span> is noise drawn from a Gaussian distribution with mean <span class="math inline">\(0\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. This results in a Gaussian likelihood:</p>
+<p>where <span class="math inline">\(\epsilon\)</span> is noise drawn from a Gaussian distribution with mean <span class="math inline">\(0\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. This results in a likelihood that is Gaussian distribution:</p>
 <p><span class="math display">\[P({\mathcal D}|w) = {\mathcal N}(y|f(x ; w), \sigma^2)\]</span></p>
 <p>Let us assume that the samples in <span class="math inline">\(\mathcal D\)</span> are independently and identically distributed (i.i.d). Under this assumption and taking logarithms for ease of computation, the likelihood value now becomes:</p>
 <p><span class="math display">\[\log P({\mathcal D}|w) = \sum_{i = 1}^{N} \log {\mathcal N}(y_i|f(x_i ; w), \sigma^2).\]</span></p>
 <p>We can estimate parameter <span class="math inline">\(w\)</span> by maximizing the above quantity. This is called <em>maximum likelihood estimation</em> (MLE). Often time, this method of estimating <span class="math inline">\(w\)</span> is called a <em>frequentist approach</em>, in constrast to the <em>Bayesian approach</em> we discuss below.</p>
+</section>
 </section>
 <section id="l2-regularization" class="level2">
 <h2 class="anchored" data-anchor-id="l2-regularization">2. L2 Regularization</h2>
@@ -185,7 +207,7 @@ ul.task-list li input[type="checkbox"] {
 <p><span class="math display">\[P'(w|{\mathcal D}) = \prod_{i = 1}^{N} {\mathcal N}(y_i|f(x_i ; w), \sigma^2) \cdot \frac{\lambda}{2} \exp\left(-\lambda |w|\right).\]</span></p>
 <p>Taking logarithm on both sides,</p>
 <p><span class="math display">\[log P'(w|{\mathcal D}) = \sum_{i = 1}^N \log {\mathcal N}(y_i|f(x_i ; w), \sigma^2) - \lambda \cdot |w| + \text{const}.\]</span></p>
-<p>Hence with Laplace distribution as prior on <span class="math inline">\(w\)</span>, we arrive at L1 regularization. Again, <span class="math inline">\(\lambda\)</span> controls the strength of regualarization.</p>
+<p>Hence with Laplace distribution as prior on <span class="math inline">\(w\)</span>, we arrive at L1 regularization. Again, <span class="math inline">\(\lambda\)</span> controls the strength of regularization.</p>
 
 
 </section>

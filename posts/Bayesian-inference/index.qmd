@@ -8,6 +8,34 @@ Regularization is a common technique in machine learning to prevent overfitting.
 
 ## 1. Background
 
+### Model Complexity
+
+Our intuition is that simpler models are preferable; models that are excessively complicated lead to overfitting. Let $L_{\mathcal D}({\bf w})$ measure the misfit of model with parameters $\bf w$ to a given dataset $\mathcal D$. We can augment the loss function to penalize more complex models:
+
+$$ L({\bf w}) = L_{\mathcal D}({\bf w}) + \lambda L_{reg}(\bf w)$$
+
+This is called *regularization* in machine learning and *shrinkage* in statistics. $\lambda$ is called the *regularization coefficient* and controls the trade-off between fitting the dataset $\mathcal D$ well and giving simpler, more generalizable model.
+
+There are two ways to think of model complexity:
+
+* model complexity as a function of weights of all the features in a model 
+
+A feature weight with a high absolute value is more complex than a feature weight with low absolute value. In this case,
+
+$$L_{reg}({\bf w}) = {\bf w}^T{\bf w} = ||{\bf w}||^2 = w_1^2 + w_2^2 + \dots + w_n^2$$
+
+This is known as *L2 regularization* or *weight decay*. Optimizing loss function with L2 regularization is generally easier and results in small parameter values. The resulting model is known as *ridge regression*.
+
+* model complexity as a function of the total number of features with nonzero weights
+
+To achieve this, we don't set our regularization penaly as the number of nonzero parameters - this makes the optimization difficult. Instead, we use *L1 regularization*:
+
+$$L_{reg}({\bf w}) = ||{\bf w}||_1^2 = |w_1| + |w_2| + \dots + |w_n|$$
+
+This has the same effect of setting only some parameter values to be nonzero, and is convex hence easier to optimize. The resulting model is known as *Lasso*.
+
+### Maximum Likelihood Estimation
+
 We are going to make extensive use of the Bayes' theorem. Let $w$ be the parameter we want to estimate and ${\mathcal D} = (x_1, y_1), (x_2, y_2), \dots, (x_N, y_N)$ be the dataset. Then, we have:
 
 $$P(w|{\mathcal D}) = \frac{P({\mathcal D}|w) \cdot P(w)}{P({\mathcal D})}.
@@ -23,7 +51,7 @@ Let's say we want to estimate parameter $w$ from an observed dataset $\mathcal D
 
 $$y = f(x ; w) + \epsilon$$
 
-where $\epsilon$ is noise drawn from a Gaussian distribution with mean $0$ and variance $\sigma^2$. This results in a Gaussian likelihood:
+where $\epsilon$ is noise drawn from a Gaussian distribution with mean $0$ and variance $\sigma^2$. This results in a likelihood that is Gaussian distribution:
 
 $$P({\mathcal D}|w) = {\mathcal N}(y|f(x ; w), \sigma^2)$$
 
@@ -67,4 +95,4 @@ Taking logarithm on both sides,
 
 $$log P'(w|{\mathcal D}) = \sum_{i = 1}^N \log {\mathcal N}(y_i|f(x_i ; w), \sigma^2) - \lambda \cdot |w| + \text{const}.$$
 
-Hence with Laplace distribution as prior on $w$, we arrive at L1 regularization. Again, $\lambda$ controls the strength of regualarization.
+Hence with Laplace distribution as prior on $w$, we arrive at L1 regularization. Again, $\lambda$ controls the strength of regularization.
