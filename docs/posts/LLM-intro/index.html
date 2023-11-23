@@ -204,7 +204,7 @@ Fig. 3 - Schematic representations of embeddings in 2-dimension. Normally embedd
 <section id="encoder-decoder-models" class="level5">
 <h5 class="anchored" data-anchor-id="encoder-decoder-models">2.1.2. Encoder-Decoder Models</h5>
 <p>The Transformer, at a high level, consists of two main components - an encoder and a decoder. The encoder takes in the word embeddings and transforms them by a sequence of operations to produce another set of ‘encoded’ embeddings. In each operation of that sequence, we allow the embeddings of all words to ‘interact’ and influence each other. The effect is that the new set of ‘encoded embeddings’ encapsulates higher-level context of the sentence.</p>
-<p>The decoder takes in the set of embedded vectors to produce a sequence of real-valued vectors. Once we pass this sequence through a linear layer and softmax, we obtain the desired output.</p>
+<p>The decoder takes in the set of embedded vectors to produce a sequence of real-valued vectors. Once we pass this sequence through a linear layer and softmax, we obtain the desired output. The softmax function normalizes the values in a vector to a probability distribution, bringing higher values closer to 1 and lower values to 0.</p>
 <figure class="figure">
 <img src="fig4.png" class="center figure-img" alt="A figure" width="600" height="250">
 <figcaption class="figure-caption">

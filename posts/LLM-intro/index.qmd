@@ -73,7 +73,7 @@ An embedding represents a word by a position in a real-valued vector space whose
 
 The Transformer, at a high level, consists of two main components - an encoder and a decoder. The encoder takes in the word embeddings and transforms them by a sequence of operations to produce another set of 'encoded' embeddings. In each operation of that sequence, we allow the embeddings of all words to 'interact' and influence each other. The effect is that the new set of 'encoded embeddings' encapsulates higher-level context of the sentence.
 
-The decoder takes in the set of embedded vectors to produce a sequence of real-valued vectors. Once we pass this sequence through a linear layer and softmax, we obtain the desired output.
+The decoder takes in the set of embedded vectors to produce a sequence of real-valued vectors. Once we pass this sequence through a linear layer and softmax, we obtain the desired output. The softmax function normalizes the values in a vector to a probability distribution, bringing higher values closer to 1 and lower values to 0. 
 
 <figure>
     <img src="fig4.png" class="center" alt="A figure" width = "600" height = "250">
