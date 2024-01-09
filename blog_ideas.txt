@@ -4,3 +4,5 @@
 4. Vector Quantization
 5. ML and Control Systems
 6. Neural network verification
+7. OpenAI CLIP
+8. Branch and bound
