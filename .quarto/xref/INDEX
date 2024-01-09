@@ -28,5 +28,8 @@
   },
   "posts/Grounding-LLMs/index.qmd": {
     "index.html": "e0886b02"
+  },
+  "posts/Transformers-intro/index.qmd": {
+    "index.html": "c2e5a125"
   }
 }
