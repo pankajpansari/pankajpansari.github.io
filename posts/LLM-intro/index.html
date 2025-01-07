@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.551">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Pankaj Pansari">
+<meta name="dcterms.date" content="2023-10-30">
+
+<title>Blog - An Introduction to Large Language Models</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+<link rel="stylesheet" href="../../styles.css">
+</head>
+
+<body class="nav-fixed fullcontent">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Blog</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-body">
+      <h1 class="title">An Introduction to Large Language Models</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Pankaj Pansari </p>
+            </div>
+    </div>
+      
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">October 30, 2023</p>
+      </div>
+    </div>
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    
+<!-- main -->
+<main class="content quarto-banner-title-block" id="quarto-document-content">
+
+
+
+
+
+<div style="text-align: justify">
+<style>
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+</style>
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">1. Introduction</h2>
+<p>Large language models (LLMs) are very large deep learning models that aim to predict and generate sensible text in a natural or symbolic human language. LLMs, in other words, are trained to model human language and even symbolic language such as code. We say that LLMs are trained for the task of language modeling.</p>
+<p>We call models that can generate any form of content as generative models; for examples, models to generate images, videos, or music. Since LLMs generate text, they are also generative models.</p>
+<p>In this blog post, we look at the difference between LLMs and earlier language models (LMs), we briefly review the architecture and training strategies for LLMs, and explain why they have been astoundingly successful at a wide variety of language tasks. We defer a detailed discussion of more fundamental technical topics such as language modeling, embeddings, and Transformer models to later blog posts.</p>
+</section>
+<section id="background" class="level2">
+<h2 class="anchored" data-anchor-id="background">2. Background</h2>
+<section id="language-modeling" class="level3">
+<h3 class="anchored" data-anchor-id="language-modeling">2.1 Language Modeling</h3>
+<p>The essence of tasks such as text translation, question-answering, making a chatbot is learning how to model human language. An LM is basically a probabilistic model that assigns a probability <span class="math display">\[ P(w_1, w_2, \dots, w_n) \]</span> to every finite sequence of words <span class="math inline">\(w_1, \dots, w_n\)</span> (grammatical or not). This joint probability can be represented in terms of conditional probabilities as</p>
+<p><span class="math display">\[ P(w_1, w_2, \dots, w_n) = P(w_1) \times P(w_2|w_1) \times P(w_3|w_1, w_2) \dots \times P(w_n|w_1, w_2, \dots, w_{n-1}).\]</span></p>
+<p>Hence, for the sentence “I am going to the market”, we have</p>
+<p><span class="math display">\[P(\text{I am going to the market}) = P(\text{I}) \times P(\text{am|I}) \times P(\text{going|I am}) \times P(\text{to|I am going}) \]</span> <span class="math display">\[\times P(\text{the|I am going to}) \times P(\text{market|I am going to the}).\]</span></p>
+<p>Hence, an LM needs to learn these conditional probabilities for many different groups of words and phrases. With a large text dataset at hand, this aim can be formulated as a machine learning task in two ways:</p>
+<ul>
+<li>prediction of next word in the text given the previous words/phrases in a sentence; for example,</li>
+</ul>
+<figure class="figure">
+<img src="fig1.png" class="center figure-img" alt="A figure" width="350" height="200">
+<figcaption>
+Fig. 1 - Next word prediction
+</figcaption>
+</figure>
+<ul>
+<li>prediction of masked words or phrases given the rest of the words in the sentence (called <em>masked language modeling</em>); for example,</li>
+</ul>
+<figure class="figure">
+<img src="fig2.png" class="center figure-img" alt="A figure" width="400" height="200">
+<figcaption>
+Fig. 2 - Masked word prediction
+</figcaption>
+</figure>
+<p>Hence, the system creates its own prediction challenges from the text corpus. This learning paradigm where we don’t provide explicit training labels is called <em>self-supervised learning</em>. Since we do away with the need for expensive labeling, use of large unlabeled text datasets, scraped from the Web, becomes possible. The concept is used not just in the domain of natural language processing (NLP), but for computer vision as well.</p>
+<p>Prediction of masked/next word(s) is powerful because doing it well calls for different kinds of understanding; every form of linguistic and world knowledge from grammar, sentence structure, word meaning, to facts help one to perform this task better. In performing language modeling, a model gathers a wide understanding of language and the world represented in the training corpus.</p>
+</section>
+<section id="transformers" class="level3">
+<h3 class="anchored" data-anchor-id="transformers">2.1 Transformers</h3>
+<p>Transformers are NLP models that take in text (a sequence of words) and output another text to perform some task such as translation or question-answering.</p>
+<section id="embeddings" class="level4">
+<h4 class="anchored" data-anchor-id="embeddings">2.1.1. Embeddings</h4>
+<p>An embedding represents a word by a position in a real-valued vector space whose dimension can be in hundreds or thousands. The proximity of embeddings of two different words in this space in an indication of their semantic similarity.</p>
+<figure class="figure">
+<img src="fig3.png" class="center figure-img" alt="A figure" width="400" height="250">
+<figcaption>
+Fig. 3 - Schematic representations of embeddings in 2-dimension. Normally embeddings have many more dimensions.
+</figcaption>
+</figure>
+<section id="encoder-decoder-models" class="level5">
+<h5 class="anchored" data-anchor-id="encoder-decoder-models">2.1.2. Encoder-Decoder Models</h5>
+<p>The Transformer, at a high level, consists of two main components - an encoder and a decoder. The encoder takes in the word embeddings and transforms them by a sequence of operations to produce another set of ‘encoded’ embeddings. In each operation of that sequence, we allow the embeddings of all words to ‘interact’ and influence each other. The effect is that the new set of ‘encoded embeddings’ encapsulates higher-level context of the sentence.</p>
+<p>The decoder takes in the set of embedded vectors to produce a sequence of real-valued vectors. Once we pass this sequence through a linear layer and softmax, we obtain the desired output. The softmax function normalizes the values in a vector to a probability distribution, bringing higher values closer to 1 and lower values to 0.</p>
+<figure class="figure">
+<img src="fig4.png" class="center figure-img" alt="A figure" width="600" height="250">
+<figcaption>
+Fig. 4 - Encoder-decoder model.
+</figcaption></figure>
+</section>
+</section>
+<section id="self-attention" class="level4">
+<h4 class="anchored" data-anchor-id="self-attention">2.1.3. Self-attention</h4>
+<p>An key feature of Transformer models is their use of <em>attention</em> during the encoding and decoding phases. Attention layers are special architectural features that are present in encoder and decoder. In encoder, they enable the model to pay specific attention to certain words in the input sentence when trying to form a representation of each word. In decoder, they enable the model to pay attention to already produced output when generating the next output word.</p>
+<p>It’s clear that interpretation of words and phrases is context dependent and depends on the remaining words/phrases in the sentences. Crucially, we only need a few context words, and not the whole sentence, to determine the meaning/representation of a particular word. For example, the meaning of the word <em>bat</em> in <em>Cricket is played with a bat</em> can be inferred by looking at <em>Cricket</em> and that in <em>Bats are nocturnal creatures</em> by looking at <em>creatures</em>.</p>
+<p>Attention also lends itself to parallel computation, thereby boosting the speed at which powerful NLP models can be trained on GPUs.</p>
+</section>
+</section>
+</section>
+<section id="large-language-models" class="level2">
+<h2 class="anchored" data-anchor-id="large-language-models">3. Large Language Models</h2>
+<p>A machine learning model trained on vast quantity of data at scale (generally using self-supervision) can be adapted to a wide range of downstream tasks; such a model is called a <em>foundation model</em>. Large language models are a specific type of foundation model for NLP tasks and they make use of the Transformer architecture we discussed above. Some examples of LLMs are BERT, GPT-3, and T5.</p>
+<p>Though LLMs are based on the already established ideas of deep learning and self-supervised learning, it is the scale of these models and the datasets on which they are trained that make possible the astonishing performance on a wide variety of tasks. This scale is facilitated by improvements in computer hardware (GPU and memory), development of novel Transformer architecture, and the availability of huge datasets. Self-supervised learning is important to the ability to use huge data, since annotation is not required in this case.</p>
+<p>The significance of foundation models lies in two concepts: <em>emergence</em> and <em>homogenization</em>. <em>Emergence</em> means that the foundation models with their billions of parameters can be adapted to a wide variety of tasks, through mere textual description of the task (prompts); that is, they are able to do <em>in-context learning</em> for many tasks for which they were neither trained nor anticipated to be used for. <em>Homogenization</em> means that there exists a handful of powerful base foundation models, such as BERT or T5, from which almost all state-of-the-art NLP models are derived through fine-tuning.</p>
+<section id="types-of-llms" class="level3">
+<h3 class="anchored" data-anchor-id="types-of-llms">3.1 Types of LLMs</h3>
+<p>The original Transformer architecture consists of two parts - encoder and decoder. Depending on the task at hand, researchers use either of the parts or both, giving rise to three types of LLMs:</p>
+<ol type="1">
+<li><p><strong>Encoder-only LLMs</strong> (eg. BERT) - This variant uses only the encoder part. It is designed to produce dense embeddings for the input word sequence. While pretraining using masked word prediction, one attaches an un-embedding layer, which produces one-hot encoded words. For downstream tasks, we remove the un-emdedding layer. A small task-specific model is trained on top of the encoder-only model making use of the embeddings. Such models are most suitable for tasks like missing word prediction and document classification.</p></li>
+<li><p><strong>Decoder-only LLMs</strong> (eg. GPT) - This variant uses only the decoder part of the Transformer. It is mainly used for text generation (output) from a given prompt (input). The input sequence or prompt is first encoded to a single large embedding from which the decoder outputs a sequence of words in an auto-regressive manner. <em>Auto-regression</em> means while generating a word, the model can refer to the previously generated words.</p></li>
+<li><p><strong>Encoder-decoder (eg. T5)</strong> - This uses both encoder and decoder parts, making such a model quite large. It is used for tasks like language translation.</p></li>
+</ol>
+<p>While encoder-decoder models are generalizations of encoder-only and decoder-only, it’s better to use smaller models with less parameters if the task calls for that. Encoder-only models are good for understanding tasks, decoder-only for generation tasks, and encoder-decoder for tasks where both inputs and outputs can be large sequences.</p>
+</section>
+<section id="training-llms" class="level3">
+<h3 class="anchored" data-anchor-id="training-llms">3.2 Training LLMs</h3>
+<p>LLMs typically follow the paradigm of pretraining and transfer learning.</p>
+<p><strong>Pretraining</strong> - via self-supervised learning on a large textual corpus such as Wikipedia or GitHub. The resulting model is called <em>pre-trained language model</em> (PLM) and it can be adapted to a wide variety of downstream tasks. This is the part which takes a huge amount of training time and compute resources due to the size of the model and training data.</p>
+<p><strong>Transfer learning</strong> - adapting the model to a specific task. Since the PLM has already acquired a lot of language and factual knowledge, this step needs a tiny amount of data and compute. This can be done via:</p>
+<ol type="1">
+<li><p><strong>Fine-tuning</strong> - The parameters of PLM are adjusted by training with additional data relevant to the application. These can be of 3 types:</p>
+<ol type="a">
+<li><p>Unsupervised: Suppose one is building a programming co-pilot using PLMs. The standard PLMs are usually pre-trained on internet text such as Wikipedia. We can now fine-tune them on code text, again using self-supervised learning.</p></li>
+<li><p>Supervised: PLMs are pre-trained for next or masked word prediction. If we want to use them for, let’s say, document sentiment analysis, we need to replace the output layer with a new one and train it with input-output pairs of texts and the associated sentiments.</p></li>
+<li><p>Reinforcement Learning from Human Feedback (RLHF): This approach, mainly used by text generation models, consists of repeated execution of the following:</p>
+<ul>
+<li>The model is given a prompt and it generates multiple plausible answers.</li>
+<li>The different answers are ranked by a human from best to worst.</li>
+<li>The scores of the different answers are backpropagated.</li>
+</ul></li>
+</ol></li>
+<li><p><strong>Prompt engineering</strong> - Fine-tuning used to be the only paradigm for transfer learning until recently. Now more powerful PLMs like GPT-3 only require a prompt and no explicit training (<em>zero-shot learning</em>) or a handful of examples (<em>few-shot learning</em>) to adapt to a new task.</p></li>
+</ol>
+</section>
+</section>
+<section id="challenges-and-research-directions" class="level2">
+<h2 class="anchored" data-anchor-id="challenges-and-research-directions">4. Challenges and Research Directions</h2>
+<section id="multi-modality-and-environment-interaction" class="level3">
+<h3 class="anchored" data-anchor-id="multi-modality-and-environment-interaction">4.1 Multi-modality and Environment Interaction</h3>
+<p>A lot of research work is being done currently on training foundation models using data from different modalities such as video and audio. By augmenting learning with multiple sensory data and knowledge, we provide stronger learning signals and increase learning speed.</p>
+<p>One can also situate the foundation model in an environment where it can interact with other agents and objects; such models are called <em>embodied foundation models</em>. This can help the model learn cause and effect like humans by means of physically interacting with surroundings.</p>
+</section>
+<section id="understanding-and-intelligence" class="level3">
+<h3 class="anchored" data-anchor-id="understanding-and-intelligence">4.2 Understanding and Intelligence</h3>
+<p>The impressive performance of LLMs on a wide variety of tasks, even on ones they were not trained for, has given rise to debates about whether or not these models are actually learn language in the way humans do <a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> or whether they are just elaborate rewriting systems devoid of meaning.</p>
+<p>The first position seems partly convincing because state-of-the-art LLMs remain susceptible to unpredictable and unhumanlike intelligence. Sometimes LLMs generate text and responses that seem syntactically correct and natural but in reality they are incorrect factually - this is called <em>hallucination</em>.</p>
+<p>On the other hand, researchers argue that given the variety and difficulty of tasks multi-modal foundation models like GPT-4 can solve, we can confidently say they exhibit aspects of intelligence<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. There’s been some recent work on understanding in-context learning which posits that perhaps these large foundation models have smaller machine-learning models inside them that the big model can train to perform a new task<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>. Clearly, some aspects of LLM behavior indeed seem intelligent, but not exactly in human way; this calls for a rethinking and expansion of the meaning of intelligence.</p>
+</section>
+<section id="alignment" class="level3">
+<h3 class="anchored" data-anchor-id="alignment">4.3 Alignment</h3>
+<p><em>Alignment</em> refers to the process of ensuring that LLMs behave in harmony with human values and preferences. An <em>aligned</em> LLM is trustworthy. The characteristics needed for an LLM to be used with trust in the real-world are reliability, safety, fairness, resistance to misuse, explainability, and robustness <a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. Out of these, here we only consider fairness.</p>
+<p><strong>Fairness</strong> - Due to the huge size of training data and LLMs, we don’t clealy understand the biases encapsulated in these models nor have an estimate of safety for use in critical applications. Homogenization is also a liability, since all derived NLP models may inherit the same harmful biases of a few foundation models. This calls for investing significant resources into curating and documenting LLM training data.</p>
+<p>Another concern is that with more widespread use of LLMs, more content on the web is likely to be LLM-generated. When future models are trained on web data, bias is likely to be propagated and the models can become less capable - a phenomenon known as <em>model collapse</em> <a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>.</p>
+</section></section></div>
+
+
+
+
+
+
+<div id="quarto-appendix" class="default"><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><h2 class="anchored quarto-appendix-heading">Footnotes</h2>
+
+<ol>
+<li id="fn1"><p>Bender, Emily M., et al.&nbsp;“On the dangers of stochastic parrots: Can language models be too big?🦜.” Proceedings of the 2021 ACM conference on fairness, accountability, and transparency. 2021.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Bubeck, Sébastien, et al.&nbsp;“Sparks of artificial general intelligence: Early experiments with gpt-4.” arXiv preprint arXiv:2303.12712 (2023).<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Akyürek, Ekin, et al.&nbsp;“What learning algorithm is in-context learning? investigations with linear models.” arXiv preprint arXiv:2211.15661 (2022).<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Liu, Yang, et al.&nbsp;“Trustworthy LLMs: a Survey and Guideline for Evaluating Large Language Models’ Alignment.” arXiv preprint arXiv:2308.05374 (2023).<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>Shumailov, Ilia, et al.&nbsp;“The Curse of Recursion: Training on Generated Data Makes Models Forget” arXiv preprint 2305.17493<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section></div></main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
