@@ -1,49 +1,35 @@
 ---
-title: ""
-date: "2023-01-09"
+title: "Automated Qualitative Feedback on Programming Assignments"
+date: "2025-01-07"
 author: "Pankaj Pansari"
 ---
 
 <div style="text-align: justify"> 
 
-## Introduction
+I've been teaching courses on Computer Systems and Operating Systems at Plaksha University. Programming assignments are an integral part of such systems courses. The challenge comes in evaluating the large number of submissions. One can write scripts to score the correctness of code, perhaps by test cases; even performance measures such as execution time or cache memory hits/misses can be easily captured. The harder part is giving feedback on the quality of the code. Usually, TAs annotate the submission indicating how readable or well-organized the program is and whether it makes use of good language conventions. This calls for good programming expertise from the TAs themselves; a lot of effort is also required to give such feedback for a large class.
 
-## Background
+I wrote a tool called [CodeInsight](https://github.com/pankajpansari/code_insight?tab=readme-ov-file) to provide such feedback automatically. It makes use of a suite of state-of-the-art LLMs in an agent-based architecture. Given a problem statement and an assignment program, the tool returns an annotated version of the program, inserting comments at appropriate points, either to suggest improvement or to commend good implementation; the original code remains as it is. The parameters are cleanliness, language conventions, organization, data structures, and use of pointers (for C). It goes without saying that program correctness comes first and foremost; this tool does not check for that.
 
-## Encoder-Decoder Architecture
+While state-of-the-art models are good at code understanding, they do make mistakes. If let's say Claude-3.5-Sonnet is asked to provide feedback in our desired format, three cases can arise:
 
-## Attention Mechanism
+1. provides the correct feedback at the appropriate point
+2. provides feedback at some point, but that isn't quite correct or relevant. For instance, it may suggest some optimization that may be valid but isn't required as part of the assignment
+3. fails to identify a bad practice where it actually occurs
 
-## Positional Encoding
+Besides, different LLMs have different strengths. ChatGPT 4.0 may correctly pick up some points that Claude missed. 
 
-## Training
+Considering these, it seemed appropriate to me to use an agent-based approach. Specifically, I used a multi-agent collaboration design pattern. Andrew Ng [puts the idea succinctly](https://www.deeplearning.ai/the-batch/how-agents-can-improve-llm-performance/): "More than one AI agent work together, splitting up tasks and discussing and debating ideas, to come up with better solutions than a single agent would". The architecture looks like the following:
 
-In this post, we are going to look at the architecture of the base version of transformer as proposed in the paper [Attention is all you need](https://arxiv.org/abs/1706.03762).
+<figure>
+    <img src="system_diagram.jpg" class="center" alt="A figure" width = "700" height = "400">
+    <figcaption> Fig. 1 - CodeInsight architecture </figcaption>
+</figure>
 
-A transformer is a special type of neural network model which is well-suited for sequence-to-sequence machine learning tasks. These tasks have input as a sequence (words, protein sequences, etc) and the output also as a sequence. Machine translation, text summarization, and question answering are some of the examples of sequence-to-sequence tasks. In fact, transformers can also be used for tasks where either input or output is a sequence. Hence, document classification, sentiment analysis, and protein function prediction are some more tasks amenable to transformers.
+Proposers, aggregators, annotators, and comparators are role names given to LLMs hinting the function they carry out. More details can be found in the home page of the GitHub repository. I'd just like to mention that there are actually 4 proposers (rather than 3 in the figure) and they are distinct models - Claude-3.5-Sonnet, GPT-4o, Mixtral-8x22B, and Llama-3.1-405B. Also in the spirit of breaking down tasks, the proposer-aggregator loop is run once for every evaluation parameter - readability, organization, language convention, etc. Finally, I found that it was critical for the prompts to be detailed and accurate. I made use of [this](https://web.stanford.edu/class/archive/cs/cs107/cs107.1166/advice_assigngrade.html) excellent documentation on programming assignment grading from a Stanford course.
 
-At its heart, transformer has two components - an encoder and a decoder. These two components incorporate attention mechanism - two variants called self-attention and cross-attention.
+There are two challenges with such an agent-based approach - overall system latency and API costs. The first is not an issue for us since we use the tool offline on a batch of assignments. The cost can be a concern when the number of assignments is large. I don't have cost estimates yet, but I felt it was important to first make the tool output as good as we can. I have yet to check the degradation of performance if we use, let's say, 2 proposers instead of 4, or the latest suite of smaller models.
 
-Recurrent neural networks (RNNS) were the state-of-the-art approach to language understanding tasks, along with convolutional neural networks. However, RNNs had two drawbacks which limited their effectiveness. First, they were slow to train because most of the computation was sequential rather than parallel (hence they could not effectively utilize GPUs). Second, due to a problem called vanishing gradients, they could not learn long-range dependencies.
+The fun part was the system evaluation. I wanted to compare the tool output with sample programs annotated by a good programmer. For the sample programs, I selected 10 C programs written by not-expert programmers (the programs should have scope for us to suggest feedback). I requested two of my good students to annotate those programs with feedback, and also ran the tool on the programs. I let GPT-4o do the comparison and provide a 0 or 1 score based on which of two inputs - tool or human annotation - is better (the comparison prompt was more elaborate). I computed the average win-ratio of the tool for each student. Averaged over both programmers, the win ratio was 5-5. This was encouraging.
 
-Transformers, on the other hand, need less computation to train and are a better fit for modern machine learning hardware. They also do not suffer from the vanishing gradient problem. This is because they do not use recurrence or convolution. Instead, they use attention mechanism to learn long-range dependencies.
+Although our tool goes beyond what traditional linters do, it'll be helpful to incorporate linter output and provide them as part of prompts to proposers. I'd like to do a more exhaustive human comparison testing on more C programs. Once I use it for some assignments in my course, hopefully students' feedback will give me pointers to improve the tool. 
 
-RNNs process input sequentially in left-to-right or right-to-left fashion. They read one word at a time; this forces RNNs to perform multiple steps to make decisions that depend on words far away from each other. The more such steps decisions require, the harder it is for RNNs to learn how to make those decisions.
-
-The sequential nature of RNNs makes it more difficult to take full advantage of modern parallel processing accelerators like GPUs. This is because GPUs are designed to process data in parallel. RNNs are not a good fit for GPUs because they process data sequentially.
-
-CNNs are less sequential than RNNs yet the number of steps required to combine information from distant parts of the input grows with increasing distance.
-
-Transformers perform a small, constant number of steps to compute representations of any input or output sequence.
-
-To compute the next representation for a given word, transformer compares it to every other word in the sentence. It computes an attention score for every pair of words in the sentence. These attention scores are the weights for a weighted average of all the other words' representations. The resulting weighted average is made to pass through a fully-connected neural network yielding the next representation for the given word.
- 
-Auto-regressive models.
-
-The decoder generates one word at a time, from left to right. It uses the previously generated words to predict the next word. This is called auto-regressive decoding. When predicting the next word, the transformer attends on the previously generated words and the final representations generated by the encoder.
-
-The attention mechanism permits visualization of how information flows through the model. This is useful for debugging and gaining insights into how the model works.
-
-The context vector was the bottleneck in earlier sequence-to-sequence models. The context vector is a fixed-length vector that summarizes the input sequence. The decoder uses this vector to generate the output sequence. The context vector is a bottleneck because it must contain all the information about the input sequence. This is a difficult task for long sequences.
-
-Transformers are based solely on attention. 
