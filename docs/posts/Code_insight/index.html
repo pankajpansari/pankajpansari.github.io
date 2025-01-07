@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.551">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Pankaj Pansari">
-<meta name="dcterms.date" content="2023-11-08">
+<meta name="dcterms.date" content="2023-01-09">
 
-<title>Blog - A Probabilistic Perspective on Regularization</title>
+<title>Blog -</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -47,7 +47,13 @@ ul.task-list li input[type="checkbox"] {
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -56,14 +62,13 @@ ul.task-list li input[type="checkbox"] {
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -71,10 +76,10 @@ ul.task-list li input[type="checkbox"] {
 <body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+  <header id="quarto-header" class="headroom fixed-top quarto-banner">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Blog</span>
     </a>
@@ -86,23 +91,23 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../../about.html" rel="" target="">
- <span class="menu-text">About</span></a>
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com"> <i class="bi bi-twitter" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -110,7 +115,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">A Probabilistic Perspective on Regularization</h1>
+      
                       </div>
   </div>
     
@@ -127,7 +132,7 @@ ul.task-list li input[type="checkbox"] {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">November 8, 2023</p>
+        <p class="date">January 9, 2023</p>
       </div>
     </div>
     
@@ -145,52 +150,46 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<p>Regularization is a common technique in machine learning to prevent overfitting. The two most widely used regularizers are the L2 and L1 norms. In this post, we look at how there regularizers can be thought of as being derived from prior distributions on the parameters we’re estimating.</p>
-<section id="background" class="level1">
-<h1>Background</h1>
-<p>We are going to make extensive use of the Bayes’ theorem. Let <span class="math inline">\(w\)</span> be the parameter we want to estimate and <span class="math inline">\({\mathcal D} = (x_1, y_1), (x_2, y_2), \dots, (x_N, y_N)\)</span> be the dataset. Then, we have:</p>
-<p><span class="math display">\[P(w|{\mathcal D}) = \frac{P({\mathcal D}|w) \cdot P(w)}{P({\mathcal D})}.
-\]</span></p>
-<p>In the above equation,</p>
-<ul>
-<li><span class="math inline">\(P(w)\)</span> is the <em>prior distribution</em> on the parameters <span class="math inline">\(w\)</span>; this encodes our belief about what the parameter values should likely be before we have looked at any data.</li>
-<li><span class="math inline">\(P(\mathcal{D}|w)\)</span> is the <em>likelihood</em> of <span class="math inline">\(\mathcal{D}\)</span> given some assignment of <span class="math inline">\(w\)</span>.</li>
-<li><span class="math inline">\(P(w|\mathcal{D})\)</span> is the <em>posterior distribution</em> of the parameters <span class="math inline">\(w\)</span> after the dataset <span class="math inline">\(\mathcal D\)</span> is known.</li>
-</ul>
-<p>Let’s say we want to estimate parameter <span class="math inline">\(w\)</span> from an observed dataset <span class="math inline">\(\mathcal D\)</span>. We assume the relation between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> as</p>
-<p><span class="math display">\[y = f(x ; w) + \epsilon\]</span></p>
-<p>where <span class="math inline">\(\epsilon\)</span> is noise drawn from a Gaussian distribution with mean <span class="math inline">\(0\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. This results in a Gaussian likelihood:</p>
-<p><span class="math display">\[P({\mathcal D}|w) = {\mathcal N}(y|f(x ; w), \sigma^2)\]</span></p>
-<p>Let us assume that the samples in <span class="math inline">\(\mathcal D\)</span> are independently and identically distributed (i.i.d). Under this assumption and taking logarithms for ease of computation, the likelihood value now becomes:</p>
-<p><span class="math display">\[\log P({\mathcal D}|w) = \sum_{i = 1}^{N} \log {\mathcal N}(y_i|f(x_i ; w), \sigma^2).\]</span></p>
-<p>We can estimate parameter <span class="math inline">\(w\)</span> by maximizing the above quantity. This is called <em>maximum likelihood estimation</em> (MLE). Often time, this method of estimating <span class="math inline">\(w\)</span> is called a <em>frequentist approach</em>, in constrast to the <em>Bayesian approach</em> we discuss below.</p>
+
+<div style="text-align: justify">
+
+<section id="introduction" class="level2">
+<h2 class="anchored" data-anchor-id="introduction">Introduction</h2>
 </section>
-<section id="l2-regularization" class="level1">
-<h1>L2 Regularization</h1>
-<p>We note that the denominator in the Bayes’ theorem does not depend on the parameters <span class="math inline">\(w\)</span> we want to estimate; hence we can ignore that term. We define the unnormalized posterior distribution as</p>
-<p><span class="math display">\[P'(w|{\mathcal D}) = P({\mathcal D}|w) \cdot P(w)\]</span>.</p>
-<p>Let us now see what happens when we introduce prior distribution on parameter <span class="math inline">\(w\)</span>. In the first case, let us assume that <span class="math inline">\(w\)</span> follows a Gaussian distribution <span class="math inline">\({\mathcal N}(w|0, \lambda^{-1})\)</span> where <span class="math inline">\(\lambda\)</span> is a strictly positive scalar. We then have:</p>
-<p><span class="math display">\[P'(w|{\mathcal D}) = \prod_{i = 1}^{N} {\mathcal N}(y_i|f(x_i ; w), \sigma^2) \cdot {\mathcal N}(w|0, \lambda^{-1})\]</span>.</p>
-<p>Taking logarithm on both sides, we obtain:</p>
-<p><span class="math display">\[log P'(w|{\mathcal D}) = \sum_{i = 1}^N \log {\mathcal N}(y_i|f(x_i ; w), \sigma^2) - \lambda w^2 + \text{const}.\]</span></p>
-<p>We can now see how our selection of prior for <span class="math inline">\(w\)</span> as normal distribution results in L2 regularization. In the above equation, <span class="math inline">\(w^2\)</span> is the squared L2-norm of the vector <span class="math inline">\(w\)</span> with <span class="math inline">\(\lambda\)</span> controlling the strength of regularization.</p>
-<p>Often, we seek only a point estimate of <span class="math inline">\(w\)</span> instead of the full posterior distribution. One solution is to take the mode of this posterior as the estimate of <span class="math inline">\(w\)</span>; this approach is called <em>maximum a posteriori</em> (MAP) estimation. MAP estimation differs from MLE in the fact that we incorporate prior knowledge about <span class="math inline">\(w\)</span>.</p>
+<section id="background" class="level2">
+<h2 class="anchored" data-anchor-id="background">Background</h2>
 </section>
-<section id="l1-regularization" class="level1">
-<h1>L1 Regularization</h1>
-<p>We’ll first need to look at a distribution called the Laplace distribution. With <span class="math inline">\(w\)</span> as the random variable, it is given by</p>
-<p><span class="math display">\[ g(w|\mu, b) = \frac{1}{2b} \exp\left(-\frac{|w - \mu|}{b}\right)\]</span></p>
-<p>and <span class="math inline">\(\mu, b\)</span> are referred to as <em>location parameter</em> and <em>diversity</em> respectively.</p>
-<p>Now let us assume that the prior distribution on <span class="math inline">\(w\)</span> is a Laplace distribution with location parameter <span class="math inline">\(\mu = 0\)</span> and <span class="math inline">\(b = \lambda^{-1}\)</span>. The unnormalized posterior distribution in this case becomes:</p>
-<p><span class="math display">\[P'(w|{\mathcal D}) = \prod_{i = 1}^{N} {\mathcal N}(y_i|f(x_i ; w), \sigma^2) \cdot \frac{\lambda}{2} \exp\left(-\lambda |w|\right).\]</span></p>
-<p>Taking logarithm on both sides,</p>
-<p><span class="math display">\[log P'(w|{\mathcal D}) = \sum_{i = 1}^N \log {\mathcal N}(y_i|f(x_i ; w), \sigma^2) - \lambda \cdot |w| + \text{const}.\]</span></p>
-<p>Hence with Laplace distribution as prior on <span class="math inline">\(w\)</span>, we arrive at L1 regularization. Again, <span class="math inline">\(\lambda\)</span> controls the strength of regualarization.</p>
+<section id="encoder-decoder-architecture" class="level2">
+<h2 class="anchored" data-anchor-id="encoder-decoder-architecture">Encoder-Decoder Architecture</h2>
+</section>
+<section id="attention-mechanism" class="level2">
+<h2 class="anchored" data-anchor-id="attention-mechanism">Attention Mechanism</h2>
+</section>
+<section id="positional-encoding" class="level2">
+<h2 class="anchored" data-anchor-id="positional-encoding">Positional Encoding</h2>
+</section>
+<section id="training" class="level2">
+<h2 class="anchored" data-anchor-id="training">Training</h2>
+<p>In this post, we are going to look at the architecture of the base version of transformer as proposed in the paper <a href="https://arxiv.org/abs/1706.03762">Attention is all you need</a>.</p>
+<p>A transformer is a special type of neural network model which is well-suited for sequence-to-sequence machine learning tasks. These tasks have input as a sequence (words, protein sequences, etc) and the output also as a sequence. Machine translation, text summarization, and question answering are some of the examples of sequence-to-sequence tasks. In fact, transformers can also be used for tasks where either input or output is a sequence. Hence, document classification, sentiment analysis, and protein function prediction are some more tasks amenable to transformers.</p>
+<p>At its heart, transformer has two components - an encoder and a decoder. These two components incorporate attention mechanism - two variants called self-attention and cross-attention.</p>
+<p>Recurrent neural networks (RNNS) were the state-of-the-art approach to language understanding tasks, along with convolutional neural networks. However, RNNs had two drawbacks which limited their effectiveness. First, they were slow to train because most of the computation was sequential rather than parallel (hence they could not effectively utilize GPUs). Second, due to a problem called vanishing gradients, they could not learn long-range dependencies.</p>
+<p>Transformers, on the other hand, need less computation to train and are a better fit for modern machine learning hardware. They also do not suffer from the vanishing gradient problem. This is because they do not use recurrence or convolution. Instead, they use attention mechanism to learn long-range dependencies.</p>
+<p>RNNs process input sequentially in left-to-right or right-to-left fashion. They read one word at a time; this forces RNNs to perform multiple steps to make decisions that depend on words far away from each other. The more such steps decisions require, the harder it is for RNNs to learn how to make those decisions.</p>
+<p>The sequential nature of RNNs makes it more difficult to take full advantage of modern parallel processing accelerators like GPUs. This is because GPUs are designed to process data in parallel. RNNs are not a good fit for GPUs because they process data sequentially.</p>
+<p>CNNs are less sequential than RNNs yet the number of steps required to combine information from distant parts of the input grows with increasing distance.</p>
+<p>Transformers perform a small, constant number of steps to compute representations of any input or output sequence.</p>
+<p>To compute the next representation for a given word, transformer compares it to every other word in the sentence. It computes an attention score for every pair of words in the sentence. These attention scores are the weights for a weighted average of all the other words’ representations. The resulting weighted average is made to pass through a fully-connected neural network yielding the next representation for the given word.</p>
+<p>Auto-regressive models.</p>
+<p>The decoder generates one word at a time, from left to right. It uses the previously generated words to predict the next word. This is called auto-regressive decoding. When predicting the next word, the transformer attends on the previously generated words and the final representations generated by the encoder.</p>
+<p>The attention mechanism permits visualization of how information flows through the model. This is useful for debugging and gaining insights into how the model works.</p>
+<p>The context vector was the bottleneck in earlier sequence-to-sequence models. The context vector is a fixed-length vector that summarizes the input sequence. The decoder uses this vector to generate the output sequence. The context vector is a bottleneck because it must contain all the information about the input sequence. This is a difficult task for long sequences.</p>
+<p>Transformers are based solely on attention.</p>
 
 
 </section>
 
-</main> <!-- /main -->
+</div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -270,10 +269,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -283,8 +299,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -296,7 +321,130 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -340,6 +488,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -365,6 +514,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -425,6 +600,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+
 
 
 
