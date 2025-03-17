@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Pankaj Pansari">
+<meta name="dcterms.date" content="2025-03-17">
 
-<title>Blog</title>
+<title>Blog - Throughtput vs Latency - GPU vs CPU</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -23,24 +25,22 @@ ul.task-list li input[type="checkbox"] {
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,77 +68,19 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Blog</span>
     </a>
   </div>
@@ -149,7 +91,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -172,266 +114,82 @@ window.Quarto = {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page">
-      <h1 class="title">Blog</h1>
+    <div class="quarto-title column-body">
+      <h1 class="title">Throughtput vs Latency - GPU vs CPU</h1>
                       </div>
   </div>
     
   
-  <div class="quarto-title-meta column-page">
+  <div class="quarto-title-meta">
 
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Pankaj Pansari </p>
+            </div>
+    </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 17, 2025</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 
+<p><em>CPUs are optimized for latency; GPUs are optimized for throughputs. They are independent processors, so can and should work on different things at the same time.</em></p>
+<p><strong>Latency</strong> - Time taken to complete a single operation or instruction; commonly measured in clock cycles. Lower latency is obviously desirable. Note that latency can be talked of for CPU/GPU computation or memory access - they are two different things. The value of latency of an instruction depends on the type of instruction (integer/floating-point/SIMD). Here we are not referring to a particular type of instruction.</p>
+<p><strong>Throughput</strong> - Number of operations or instructions completed per unit of time. Again, throughput can refer to computation or memory access. By convention, when we say throughput, we mean computation throughput and that is measured typically in FLOPS (Floating Point Operations Per Second). Higher throughput is obviously better.</p>
+<p>The analogue of throughput for memory is called <em>bandwidth</em>. It’s the maximum amount of data transfer that can happen per unit time and these days it’s typically measured in GB/s. Note that bandwidth encompasses the memory device (DRAM/SRAM etc.) as well as the bus speeds.</p>
+<p>So here we are - we want higher throughput and lower latency. It may seem like lowering latency would automatically increase throughput and that’s true in theory; in practice there are constraints and trade-offs. We have to decide whether it’s more critical for us to have latency-optimized or throughput-optimized system. Optimizing for one practically leads to sub-optimal performance for the other.</p>
+<section id="analogy" class="level3">
+<h3 class="anchored" data-anchor-id="analogy">Analogy</h3>
+<p>Consider an analogy: we want to get from Secretariat in New Delhi (green) to Dwarka (red). We can take either the metro which takes about 75 minutes or use a car which takes 45 minutes. The metro takes longer for us (higher latency) but it transports a lot more people in let’s say an hour (higher throughput). So, the metro is optimized for throughput and the car is optimized for latency. Note that a car is more flexible and can take us to places where the metro doesn’t go.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="metro_car.png" class="img-fluid figure-img"></p>
+<figcaption>Metro vs Car</figcaption>
+</figure>
+</div>
+<p>CPUs are the cars - optimized for latency. Context switching between threads is expensive. So the CPU makes an individual thread as fast as possible. By CPU here, we actually mean both the processor and the memory system. Focusing on the processor, there are complex things like branch prediction, out of order execution, prefetching to make the latency low - this makes the cores complex and takes up real-estate on chip. Hence, we only have a few cores on a CPU. The memory hierarchy is elaborate with multiple levels to optimize for latency.</p>
+<p>GPUs, on the other hand, are the metros. The cores are simple and hence there can be a lot of them. The focus is on massive parallelism, so throughput is high. Latency for an individual thread may not be great, but for GPU workloads that’s not so important. Even the GPU memory has simpler organization and wider buses to optimize for throughput. Such a system, like a metro, works best when it’s oversubscribed; there is a deep queue of pending threads to be executed.</p>
+</section>
+<section id="asynchrony" class="level3">
+<h3 class="anchored" data-anchor-id="asynchrony">Asynchrony</h3>
+<p>CPUs and GPUs are independent processors. They can and should work on different things at the same time. The following is a bad model of how to use a CPU and a GPU together:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="synchronous.png" class="img-fluid figure-img"></p>
+<figcaption>Sychronous</figcaption>
+</figure>
+</div>
+<p>Note how GPU does some computation and then waits for something for CPU - this happens repeatedly. It’s as if the CPU and GPU are operating synchronously. In this case, a much better flow is the following:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="gpu_cpu_async.png" class="img-fluid figure-img"></p>
+<figcaption>Asychronous</figcaption>
+</figure>
+</div>
+<p>In the above, the CPU issues computation to GPU and then starts working on its own thing separately. There is good utilization of both processors. We say that they are operating asynchronously - we’re aiming for this.</p>
 
 
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-date-sort="1742149800000" data-listing-file-modified-sort="1742211608026" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="612">
-<div class="thumbnail">
-<p><a href="./posts/throughtput_latency/index.html" class="no-external"></a></p><a href="./posts/throughtput_latency/index.html" class="no-external">
-<p class="card-img-top"><img src="posts/throughtput_latency/metro_car.png"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/throughtput_latency/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/throughtput_latency/index.html" class="no-external">Throughtput vs Latency - GPU vs CPU</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/throughtput_latency/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/throughtput_latency/index.html" class="no-external"><em>CPUs are optimized for latency; GPUs are optimized for throughputs. They are independent processors, so can and should work on different things at the same time.</em></a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/throughtput_latency/index.html" class="no-external">
-<div class="listing-date">
-Mar 17, 2025
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-listing-date-sort="1736188200000" data-listing-file-modified-sort="1736319491359" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="781">
-<div class="thumbnail">
-<p><a href="./posts/Code_insight/index.html" class="no-external"></a></p><a href="./posts/Code_insight/index.html" class="no-external">
-<p class="card-img-top"><img src="posts/Code_insight/system_diagram.jpg" alt="A figure"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/Code_insight/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Code_insight/index.html" class="no-external">Automated Qualitative Feedback on Programming Assignments</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Code_insight/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Code_insight/index.html" class="no-external">I’ve been teaching courses on Computer Systems and Operating Systems at Plaksha University. Programming assignments are an integral part of such systems courses. The…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Code_insight/index.html" class="no-external">
-<div class="listing-date">
-Jan 7, 2025
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-listing-date-sort="1700591400000" data-listing-file-modified-sort="1736226714873" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="646">
-<div class="thumbnail">
-<p><a href="./posts/Grounding-LLMs/index.html" class="no-external"></a></p><a href="./posts/Grounding-LLMs/index.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/Grounding-LLMs/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Grounding-LLMs/index.html" class="no-external">Grounding Language Models in the Physical World</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Grounding-LLMs/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Grounding-LLMs/index.html" class="no-external">I recently listened to a podcast episode on The Robot Brains where Jitendra Malik, an eminent computer vision researcher, shared his thoughts and experiences on grounding…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Grounding-LLMs/index.html" class="no-external">
-<div class="listing-date">
-Nov 22, 2023
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-listing-date-sort="1699381800000" data-listing-file-modified-sort="1736226714831" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="884">
-<div class="thumbnail">
-<p><a href="./posts/Bayesian-inference/index.html" class="no-external"></a></p><a href="./posts/Bayesian-inference/index.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/Bayesian-inference/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Bayesian-inference/index.html" class="no-external">A Probabilistic Perspective on Regularization</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Bayesian-inference/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Bayesian-inference/index.html" class="no-external">Regularization is a common technique in machine learning to prevent overfitting. The two most widely used regularizers are the L2 and L1 norms. In this post, we look at how…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Bayesian-inference/index.html" class="no-external">
-<div class="listing-date">
-Nov 8, 2023
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-listing-date-sort="1698777000000" data-listing-file-modified-sort="1736226715043" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="894">
-<div class="thumbnail">
-<p><a href="./posts/ML-research-vs-production/index.html" class="no-external"></a></p><a href="./posts/ML-research-vs-production/index.html" class="no-external">
-<p class="card-img-top"><img src="posts/ML-research-vs-production/fig_1.png" alt="A figure"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/ML-research-vs-production/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/ML-research-vs-production/index.html" class="no-external">Machine Learning in Research versus Production</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/ML-research-vs-production/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/ML-research-vs-production/index.html" class="no-external">I have been going through the book ‘Designing Machine Learning Systems’ by Chip Huyen to better understand how machine learning systems are deployed in production in…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/ML-research-vs-production/index.html" class="no-external">
-<div class="listing-date">
-Nov 1, 2023
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-listing-date-sort="1698604200000" data-listing-file-modified-sort="1736226714987" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2357">
-<div class="thumbnail">
-<p><a href="./posts/LLM-intro/index.html" class="no-external"></a></p><a href="./posts/LLM-intro/index.html" class="no-external">
-<p class="card-img-top"><img src="posts/LLM-intro/fig1.png" alt="A figure"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/LLM-intro/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/LLM-intro/index.html" class="no-external">An Introduction to Large Language Models</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/LLM-intro/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/LLM-intro/index.html" class="no-external">Large language models (LLMs) are very large deep learning models that aim to predict and generate sensible text in a natural or symbolic human language. LLMs, in other…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/LLM-intro/index.html" class="no-external">
-<div class="listing-date">
-Oct 30, 2023
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-listing-date-sort="1676226600000" data-listing-file-modified-sort="1736226715071" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="855">
-<div class="thumbnail">
-<p><a href="./posts/Painting-classifier/index.html" class="no-external"></a></p><a href="./posts/Painting-classifier/index.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/Painting-classifier/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Painting-classifier/index.html" class="no-external">A Simple Painting Style Classifier</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Painting-classifier/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Painting-classifier/index.html" class="no-external">As a first project for my portfolio, I decided to build a simple deep learning model which can classify paintings based on their styles. As of now, the model supports only…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Painting-classifier/index.html" class="no-external">
-<div class="listing-date">
-Feb 13, 2023
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="7" data-listing-date-sort="1673202600000" data-listing-file-modified-sort="1736226715086" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="596">
-<div class="thumbnail">
-<p><a href="./posts/Transformers-intro/index.html" class="no-external"></a></p><a href="./posts/Transformers-intro/index.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/Transformers-intro/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Transformers-intro/index.html" class="no-external">Vanilla Transformers</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Transformers-intro/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Transformers-intro/index.html" class="no-external">In this post, we are going to look at the architecture of the base version of transformer as proposed in the paper Attention is all you need.</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Transformers-intro/index.html" class="no-external">
-<div class="listing-date">
-Jan 9, 2023
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
