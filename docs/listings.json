@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/inference-profiling/index.html",
       "/posts/throughtput_latency/index.html",
       "/posts/Code_insight/index.html",
       "/posts/Grounding-LLMs/index.html",

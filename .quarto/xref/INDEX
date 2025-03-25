@@ -37,5 +37,8 @@
   },
   "posts/throughtput_latency/index.qmd": {
     "index.html": "eedc9881"
+  },
+  "posts/inference-profiling/index.qmd": {
+    "index.html": "611bc979"
   }
 }
