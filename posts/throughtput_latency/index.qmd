@@ -33,4 +33,8 @@ Note how GPU does some computation and then waits for something for CPU - this h
 
 ![Asynchronous](gpu_cpu_async.png)
 
-In the above, the CPU issues computation to GPU and then starts working on its own thing separately. There is good utilization of both processors. We say that they are operating asynchronously - we're aiming for this. 
+In the above, the CPU issues computation to GPU and then starts working on its own thing separately. There is good utilization of both processors. We say that they are operating asynchronously - we're aiming for this.
+
+---
+*This post was inspired by part of Steve Jones' talk at GTC 2021. Thanks to Eric for telling me about it.*
+
