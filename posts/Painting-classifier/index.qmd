@@ -2,6 +2,7 @@
 title:  "A Simple Painting Style Classifier"
 date:   "2023-02-13"
 author: "Pankaj Pansari"
+draft: true
 ---
 
 As a first project for my portfolio, I decided to build a simple deep learning model which can classify paintings based on their styles. As of now, the model supports only binary classification - impressionism and cubism. This project involved the whole end-to-end process - data collection, data cleaning and transformation, model training and testing, and finally deploying it as a web application.
