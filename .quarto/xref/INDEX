@@ -40,5 +40,8 @@
   },
   "posts/inference-profiling/index.qmd": {
     "index.html": "611bc979"
+  },
+  "posts/threading-thoughts/index.qmd": {
+    "index.html": "dc82a42e"
   }
 }

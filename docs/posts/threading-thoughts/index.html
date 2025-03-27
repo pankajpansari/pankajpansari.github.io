@@ -6,8 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Pankaj Pansari">
+<meta name="dcterms.date" content="2025-03-27">
 
-<title>Blog</title>
+<title>Blog - Some Observations on Locks and Threads</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,27 +22,59 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
-<script src="site_libs/quarto-nav/quarto-nav.js"></script>
-<script src="site_libs/quarto-nav/headroom.min.js"></script>
-<script src="site_libs/clipboard/clipboard.min.js"></script>
-<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
-<script src="site_libs/quarto-search/fuse.min.js"></script>
-<script src="site_libs/quarto-search/quarto-search.js"></script>
-<meta name="quarto:offset" content="./">
-<script src="site_libs/quarto-listing/list.min.js"></script>
-<script src="site_libs/quarto-listing/quarto-listing.js"></script>
-<script src="site_libs/quarto-html/quarto.js"></script>
-<script src="site_libs/quarto-html/popper.min.js"></script>
-<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
-<script src="site_libs/quarto-html/anchor.min.js"></script>
-<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
-<script src="site_libs/bootstrap/bootstrap.min.js"></script>
-<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -68,77 +102,19 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
-<script>
 
-  window.document.addEventListener("DOMContentLoaded", function (_event) {
-    const listingTargetEl = window.document.querySelector('#listing-listing .list');
-    if (!listingTargetEl) {
-      // No listing discovered, do not attach.
-      return; 
-    }
 
-    const options = {
-      valueNames: ['listing-date','listing-title','listing-author','listing-image','listing-description',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
-      
-      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
-    };
-
-    window['quarto-listings'] = window['quarto-listings'] || {};
-    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
-
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  });
-
-  window.addEventListener('hashchange',() => {
-    if (window['quarto-listing-loaded']) {
-      window['quarto-listing-loaded']();
-    }
-  })
-  </script>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
-
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 </head>
 
-<body class="nav-fixed">
+<body class="nav-fixed fullcontent">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top quarto-banner">
     <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container mx-auto">
-    <a class="navbar-brand" href="./index.html">
+    <a class="navbar-brand" href="../../index.html">
     <span class="navbar-title">Blog</span>
     </a>
   </div>
@@ -149,7 +125,7 @@ window.Quarto = {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
-    <a class="nav-link" href="./about.html"> 
+    <a class="nav-link" href="../../about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
@@ -172,266 +148,84 @@ window.Quarto = {
 <!-- content -->
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
-    <div class="quarto-title column-page">
-      <h1 class="title">Blog</h1>
+    <div class="quarto-title column-body">
+      <h1 class="title">Some Observations on Locks and Threads</h1>
                       </div>
   </div>
     
   
-  <div class="quarto-title-meta column-page">
+  <div class="quarto-title-meta">
 
+      <div>
+      <div class="quarto-title-meta-heading">Author</div>
+      <div class="quarto-title-meta-contents">
+               <p>Pankaj Pansari </p>
+            </div>
+    </div>
       
+      <div>
+      <div class="quarto-title-meta-heading">Published</div>
+      <div class="quarto-title-meta-contents">
+        <p class="date">March 27, 2025</p>
+      </div>
+    </div>
     
       
     </div>
     
   
-  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
+<main class="content quarto-banner-title-block" id="quarto-document-content">
 
 
 
 
 
+<section id="thread-stacks" class="level2">
+<h2 class="anchored" data-anchor-id="thread-stacks">1. Thread stacks</h2>
+<p>Consider the simple multi-threaded program <a href="https://gist.github.com/pankajpansari/6d6f15b897a6deb4300dc5827855a51f#file-shared_var_threads-c">here</a>; each thread increments the shared global variable <code>counter</code> <code>max</code> number of times (we won’t write a program this way to accomplish this, but it’s good to highlight the issue). Global variable is one way to share data between threads. Can we now refactor the program to make <code>counter</code> a local variable in <code>main()</code>?</p>
+<p>To answer this question, we first need to think how we’re going to now pass 2 arguments to the thread - the identifier string (<code>"A"</code> or <code>"B"</code>) and a pointer to <code>counter</code>. This is relatively easy - we simply package them in a user-defined <code>struct</code> and pass a pointer to the <code>struct</code> to the thread.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">typedef</span> <span class="kw">struct</span> <span class="op">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">char</span> <span class="op">*</span>id<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">volatile</span> <span class="dt">int</span> counter<span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">int</span> max<span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="op">}</span> thread_args<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We know that threads share the same address space, but each thread has its own stack. Can a thread access a <code>struct</code> variable stored on the stack of the main thread? This issue did not arise when originally we were passing the string literal <code>"A"</code> or <code>"B"</code> because they are stored in the read-only part of the address space; this segment is shared by all threads.</p>
+<p>The answer is technically yes, another thread can access the <code>struct</code> variable stored on the stack of the main thread. This is possible here only because <code>main()</code> uses <code>pthread_join()</code> for proper sequencing that makes stack data sharing safe. So when a child thread <code>p1</code> or <code>p2</code> executes, the stack frame of <code>main()</code> is guaranteed to to exist. The refactored program would look something like <a href="https://gist.github.com/pankajpansari/6d6f15b897a6deb4300dc5827855a51f#file-shared_var_threads_refactor-c">this</a>.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="address_space.JPG" class="img-fluid figure-img" style="width:25.0%"></p>
+<figcaption>Address space of program with main thread + 2 child threads</figcaption>
+</figure>
+</div>
+</section>
+<section id="locks-and-a-concurrency-bug" class="level2">
+<h2 class="anchored" data-anchor-id="locks-and-a-concurrency-bug">2. Locks and a Concurrency Bug</h2>
+<p>We use locks when updating shared variables or memory locations in a multi-threaded program. This provides mutual exclusion and is crucial to the correctness of the program. What happens when we make a function call within a critical section protected by a lock, such as <a href="https://gist.github.com/pankajpansari/6d6f15b897a6deb4300dc5827855a51f#file-locks_function_call-c">here</a>?</p>
+<p>The function <code>do_something()</code> is called from within the critical section protected by a lock. This will behave just fine. A thread will execute <code>do_something()</code> while still holding the lock. It’s not necessary that the compiler will inline the function within the critical section. So jumps from the lines delineated within <code>lock()</code> and <code>unlock()</code> are possible, provided we come back to the same critical section. This is not ideal, because we usually try to keep critical sections small and protect only the lines where shared memory is updated.</p>
+<p>A serious concurrency bug occurs when we have a <code>goto</code> statement within a critical section and it jumps to a location outside that section. In this case, <code>unlock()</code> is not called by the executing thread; other threads never get a chance to acquire the lock and wait perpetually.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode c code-with-copy"><code class="sourceCode c"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>pthread_mutex_lock<span class="op">(&amp;</span>lock<span class="op">);</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>balance <span class="op">=</span> balance <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="op">(</span>some_condition<span class="op">)</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">goto</span> outside_lock<span class="op">;</span> </span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>pthread_mutex_unlock<span class="op">(&amp;</span>lock<span class="op">);</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>outside_lock<span class="op">:</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    do_something<span class="op">();</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>It’s a nasty bug which can be difficult to diagnose. The compiler will certainly not flag this, but static analysis tools can. Moral of the story: avoid <code>goto</code> entirely in concurrent code.</p>
+<hr>
+<p><em>Thanks to Subham and Moti Rattan for posing doubts in my OS class; those led to these observations.</em></p>
 
 
+</section>
 
-
-<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
-<div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-listing-date-sort="1743013800000" data-listing-file-modified-sort="1743067740802" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="521">
-<div class="thumbnail">
-<p><a href="./posts/threading-thoughts/index.html" class="no-external"></a></p><a href="./posts/threading-thoughts/index.html" class="no-external">
-<p class="card-img-top"><img src="posts/threading-thoughts/address_space.JPG"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/threading-thoughts/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/threading-thoughts/index.html" class="no-external">Some Observations on Locks and Threads</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/threading-thoughts/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/threading-thoughts/index.html" class="no-external">Consider the simple multi-threaded program here; each thread increments the shared global variable <code>counter</code> <code>max</code> number of times (we won’t write a program this way to…<code></code><code></code></a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/threading-thoughts/index.html" class="no-external">
-<div class="listing-date">
-Mar 27, 2025
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="1" data-listing-date-sort="1742841000000" data-listing-file-modified-sort="1742926852343" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="501">
-<div class="thumbnail">
-<p><a href="./posts/inference-profiling/index.html" class="no-external"></a></p><a href="./posts/inference-profiling/index.html" class="no-external">
-<p class="card-img-top"><img src="posts/inference-profiling/gpu_cpu.png"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/inference-profiling/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/inference-profiling/index.html" class="no-external">Profiling LLM Inference</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/inference-profiling/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/inference-profiling/index.html" class="no-external">Let’s use PyTorch Profiler to get a better understanding of what happens under the hood during LLM inference. The model we’re going to use is the 1B parameter…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/inference-profiling/index.html" class="no-external">
-<div class="listing-date">
-Mar 25, 2025
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="2" data-listing-date-sort="1742149800000" data-listing-file-modified-sort="1742886655755" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="631">
-<div class="thumbnail">
-<p><a href="./posts/throughtput_latency/index.html" class="no-external"></a></p><a href="./posts/throughtput_latency/index.html" class="no-external">
-<p class="card-img-top"><img src="posts/throughtput_latency/metro_car.png"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/throughtput_latency/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/throughtput_latency/index.html" class="no-external">Throughput vs Latency - GPU vs CPU</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/throughtput_latency/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/throughtput_latency/index.html" class="no-external"><em>CPUs are optimized for latency; GPUs are optimized for throughput. They are independent processors, so can and should work on different things at the same time.</em></a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/throughtput_latency/index.html" class="no-external">
-<div class="listing-date">
-Mar 17, 2025
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="3" data-listing-date-sort="1736188200000" data-listing-file-modified-sort="1736319491359" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="781">
-<div class="thumbnail">
-<p><a href="./posts/Code_insight/index.html" class="no-external"></a></p><a href="./posts/Code_insight/index.html" class="no-external">
-<p class="card-img-top"><img src="posts/Code_insight/system_diagram.jpg" alt="A figure"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/Code_insight/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Code_insight/index.html" class="no-external">Automated Qualitative Feedback on Programming Assignments</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Code_insight/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Code_insight/index.html" class="no-external">I’ve been teaching courses on Computer Systems and Operating Systems at Plaksha University. Programming assignments are an integral part of such systems courses. The…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Code_insight/index.html" class="no-external">
-<div class="listing-date">
-Jan 7, 2025
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="4" data-listing-date-sort="1700591400000" data-listing-file-modified-sort="1736226714873" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="646">
-<div class="thumbnail">
-<p><a href="./posts/Grounding-LLMs/index.html" class="no-external"></a></p><a href="./posts/Grounding-LLMs/index.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/Grounding-LLMs/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Grounding-LLMs/index.html" class="no-external">Grounding Language Models in the Physical World</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Grounding-LLMs/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Grounding-LLMs/index.html" class="no-external">I recently listened to a podcast episode on The Robot Brains where Jitendra Malik, an eminent computer vision researcher, shared his thoughts and experiences on grounding…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Grounding-LLMs/index.html" class="no-external">
-<div class="listing-date">
-Nov 22, 2023
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="5" data-listing-date-sort="1699381800000" data-listing-file-modified-sort="1736226714831" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="884">
-<div class="thumbnail">
-<p><a href="./posts/Bayesian-inference/index.html" class="no-external"></a></p><a href="./posts/Bayesian-inference/index.html" class="no-external">
-<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
-</a><p><a href="./posts/Bayesian-inference/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/Bayesian-inference/index.html" class="no-external">A Probabilistic Perspective on Regularization</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/Bayesian-inference/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/Bayesian-inference/index.html" class="no-external">Regularization is a common technique in machine learning to prevent overfitting. The two most widely used regularizers are the L2 and L1 norms. In this post, we look at how…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/Bayesian-inference/index.html" class="no-external">
-<div class="listing-date">
-Nov 8, 2023
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="6" data-listing-date-sort="1698777000000" data-listing-file-modified-sort="1736226715043" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="894">
-<div class="thumbnail">
-<p><a href="./posts/ML-research-vs-production/index.html" class="no-external"></a></p><a href="./posts/ML-research-vs-production/index.html" class="no-external">
-<p class="card-img-top"><img src="posts/ML-research-vs-production/fig_1.png" alt="A figure"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/ML-research-vs-production/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/ML-research-vs-production/index.html" class="no-external">Machine Learning in Research versus Production</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/ML-research-vs-production/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/ML-research-vs-production/index.html" class="no-external">I have been going through the book ‘Designing Machine Learning Systems’ by Chip Huyen to better understand how machine learning systems are deployed in production in…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/ML-research-vs-production/index.html" class="no-external">
-<div class="listing-date">
-Nov 1, 2023
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-<div class="quarto-post image-right" data-index="7" data-listing-date-sort="1698604200000" data-listing-file-modified-sort="1736226714987" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2357">
-<div class="thumbnail">
-<p><a href="./posts/LLM-intro/index.html" class="no-external"></a></p><a href="./posts/LLM-intro/index.html" class="no-external">
-<p class="card-img-top"><img src="posts/LLM-intro/fig1.png" alt="A figure"  class="thumbnail-image card-img"/></p>
-</a><p><a href="./posts/LLM-intro/index.html" class="no-external"></a></p>
-</div>
-<div class="body">
-<h3 class="no-anchor listing-title">
-<a href="./posts/LLM-intro/index.html" class="no-external">An Introduction to Large Language Models</a>
-</h3>
-<div class="listing-subtitle">
-<a href="./posts/LLM-intro/index.html" class="no-external"></a>
-</div>
-<div class="listing-description">
-<a href="./posts/LLM-intro/index.html" class="no-external">Large language models (LLMs) are very large deep learning models that aim to predict and generate sensible text in a natural or symbolic human language. LLMs, in other…</a>
-</div>
-</div>
-<div class="metadata">
-<a href="./posts/LLM-intro/index.html" class="no-external">
-<div class="listing-date">
-Oct 30, 2023
-</div>
-<div class="listing-author">
-Pankaj Pansari
-</div>
-</a>
-</div>
-</div>
-</div>
-<div class="listing-no-matching d-none">
-No matching items
-</div>
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
