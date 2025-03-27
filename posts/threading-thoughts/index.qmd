@@ -2,6 +2,7 @@
 title: Some Observations on Locks and Threads 
 date:  "2025-03-27"
 author: "Pankaj Pansari"
+image: "carbon.png" 
 ---
 ## 1. Thread stacks
 
