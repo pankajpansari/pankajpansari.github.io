@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/helgrind_atomics/index.html",
       "/posts/threading-thoughts/index.html",
       "/posts/inference-profiling/index.html",
       "/posts/throughtput_latency/index.html",

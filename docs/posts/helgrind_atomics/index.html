@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Pankaj Pansari">
-<meta name="dcterms.date" content="2023-11-08">
+<meta name="dcterms.date" content="2025-04-07">
 
-<title>A Probabilistic Perspective on Regularization – Blog</title>
+<title>A Closer Look at Helgrind for Concurrency Issues – Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -69,35 +69,6 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -144,7 +115,7 @@ window.Quarto = {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">A Probabilistic Perspective on Regularization</h1>
+      <h1 class="title">A Closer Look at Helgrind for Concurrency Issues</h1>
                       </div>
   </div>
     
@@ -161,7 +132,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">November 8, 2023</p>
+        <p class="date">April 7, 2025</p>
       </div>
     </div>
     
@@ -180,71 +151,32 @@ window.Quarto = {
 
 
 
-<p>Regularization is a common technique in machine learning to prevent overfitting. The two most widely used regularizers are the L2 and L1 norms. In this post, we look at how there regularizers can be thought of as being derived from prior distributions on the parameters we’re estimating.</p>
-<section id="background" class="level2">
-<h2 class="anchored" data-anchor-id="background">1. Background</h2>
-<section id="model-complexity" class="level3">
-<h3 class="anchored" data-anchor-id="model-complexity">Model Complexity</h3>
-<p>Our intuition is that simpler models are preferable; models that are excessively complicated lead to overfitting. Let <span class="math inline">\(L_{\mathcal D}({\bf w})\)</span> measure the misfit of model with parameters <span class="math inline">\(\bf w\)</span> to a given dataset <span class="math inline">\(\mathcal D\)</span>. We can augment the loss function to penalize more complex models:</p>
-<p><span class="math display">\[ L({\bf w}) = L_{\mathcal D}({\bf w}) + \lambda L_{reg}(\bf w)\]</span></p>
-<p>This is called <em>regularization</em> in machine learning and <em>shrinkage</em> in statistics. <span class="math inline">\(\lambda\)</span> is called the <em>regularization coefficient</em> and controls the trade-off between fitting the dataset <span class="math inline">\(\mathcal D\)</span> well and giving simpler, more generalizable model.</p>
-<p>There are two ways to think of model complexity:</p>
-<ul>
-<li>model complexity as a function of weights of all the features in a model</li>
-</ul>
-<p>A feature weight with a high absolute value is more complex than a feature weight with low absolute value. In this case,</p>
-<p><span class="math display">\[L_{reg}({\bf w}) = {\bf w}^T{\bf w} = ||{\bf w}||^2 = w_1^2 + w_2^2 + \dots + w_n^2\]</span></p>
-<p>This is known as <em>L2 regularization</em> or <em>weight decay</em>. Optimizing loss function with L2 regularization is generally easier and results in small parameter values. The resulting model is known as <em>ridge regression</em>.</p>
-<ul>
-<li>model complexity as a function of the total number of features with nonzero weights</li>
-</ul>
-<p>To achieve this, we don’t set our regularization penaly as the number of nonzero parameters - this makes the optimization difficult. Instead, we use <em>L1 regularization</em>:</p>
-<p><span class="math display">\[L_{reg}({\bf w}) = ||{\bf w}||_1^2 = |w_1| + |w_2| + \dots + |w_n|\]</span></p>
-<p>This has the same effect of setting only some parameter values to be nonzero, and is convex hence easier to optimize. The resulting model is known as <em>Lasso</em>.</p>
+<section id="helgrind" class="level2">
+<h2 class="anchored" data-anchor-id="helgrind">Helgrind</h2>
+<p>Concurrency issues in multi-threaded programs are notorious to track down. Helgrind is a dynamic analysis tool, part of the Valgrind suite, that helps in detecting such errors for C/C++ programs.</p>
+<p>We are going to understand Helgrind a little better through the lens of two classes of concurrency errors - <em>data race</em> and <em>deadlock</em> due to lock ordering. There is another class of errors that Helgrind can help with - incorrect usage of the pthreads library; we’ll not consider that here.</p>
+<section id="data-race" class="level4">
+<h4 class="anchored" data-anchor-id="data-race">Data Race</h4>
+<p>Helgrind first makes a note of memory locations accessed by more than more thread. For each such memory location, Helgrind asks: <em>is there at least one lock used by all threads to protect that location?</em>. If the answer to that question is no, Helgrind reports a data race.</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="data_race.JPG" class="img-fluid figure-img" style="width:120.0%"></p>
+<figcaption>How Helgrind detects data races?</figcaption>
+</figure>
+</div>
+<p>With this understanding, we are ready to look at a simple example. Consider the following 2 threaded program <a href="https://gist.github.com/pankajpansari/e9566c5c2a703a8fe33eeb6706b15828#file-data_race_1-c">here</a> with unprotected access to a shared variable <code>global_var</code>. Clearly, there’s a data race condition. However, this error may not manifest itself during every execution of the program - let’s say thread <code>p</code> starts running and completes immediately after it’s created. However, the way Helgrind detects data races is by keeping internal data structures which let it answer the above question.</p>
+<p>Another way of restating our lock question is that Helgrind asks: <em>are accesses to shared memory addresses in <strong>happens-before</strong> relation?</em> With respect to <a href="https://gist.github.com/pankajpansari/e9566c5c2a703a8fe33eeb6706b15828#file-lock_use-c">this</a> version of the program, now using lock to avoid data race condition, we can say that whichever thread acquires the lock first, its operation on <code>global_var</code> happen-before the operation of the thread that acquires the lock second. It’s another way of framing of the desired atomicity property.</p>
+<p>One thing to be careful is that Helgrind cannot detect potential data races in code paths that aren’t executed during the analysis run. So, for instance, for this <a href="https://gist.github.com/pankajpansari/e9566c5c2a703a8fe33eeb6706b15828#file-unsynchronized_conditional_branch-c">program</a> if we always give <code>0</code> as command line argument, Helgrind won’t be able to located the unprotected decrement to <code>global_var</code> in the <code>else</code> branch.</p>
 </section>
-<section id="maximum-likelihood-estimation" class="level3">
-<h3 class="anchored" data-anchor-id="maximum-likelihood-estimation">Maximum Likelihood Estimation</h3>
-<p>We are going to make extensive use of the Bayes’ theorem. Let <span class="math inline">\(w\)</span> be the parameter we want to estimate and <span class="math inline">\({\mathcal D} = (x_1, y_1), (x_2, y_2), \dots, (x_N, y_N)\)</span> be the dataset. Then, we have:</p>
-<p><span class="math display">\[P(w|{\mathcal D}) = \frac{P({\mathcal D}|w) \cdot P(w)}{P({\mathcal D})}.
-\]</span></p>
-<p>In the above equation,</p>
-<ul>
-<li><span class="math inline">\(P(w)\)</span> is the <em>prior distribution</em> on the parameters <span class="math inline">\(w\)</span>; this encodes our belief about what the parameter values should likely be before we have looked at any data.</li>
-<li><span class="math inline">\(P(\mathcal{D}|w)\)</span> is the <em>likelihood</em> of <span class="math inline">\(\mathcal{D}\)</span> given some assignment of <span class="math inline">\(w\)</span>.</li>
-<li><span class="math inline">\(P(w|\mathcal{D})\)</span> is the <em>posterior distribution</em> of the parameters <span class="math inline">\(w\)</span> after the dataset <span class="math inline">\(\mathcal D\)</span> is known.</li>
-</ul>
-<p>Let’s say we want to estimate parameter <span class="math inline">\(w\)</span> from an observed dataset <span class="math inline">\(\mathcal D\)</span>. We assume the relation between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> as</p>
-<p><span class="math display">\[y = f(x ; w) + \epsilon\]</span></p>
-<p>where <span class="math inline">\(\epsilon\)</span> is noise drawn from a Gaussian distribution with mean <span class="math inline">\(0\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. This results in a likelihood that is Gaussian distribution:</p>
-<p><span class="math display">\[P({\mathcal D}|w) = {\mathcal N}(y|f(x ; w), \sigma^2)\]</span></p>
-<p>Let us assume that the samples in <span class="math inline">\(\mathcal D\)</span> are independently and identically distributed (i.i.d). Under this assumption and taking logarithms for ease of computation, the likelihood value now becomes:</p>
-<p><span class="math display">\[\log P({\mathcal D}|w) = \sum_{i = 1}^{N} \log {\mathcal N}(y_i|f(x_i ; w), \sigma^2).\]</span></p>
-<p>We can estimate parameter <span class="math inline">\(w\)</span> by maximizing the above quantity. This is called <em>maximum likelihood estimation</em> (MLE). Often time, this method of estimating <span class="math inline">\(w\)</span> is called a <em>frequentist approach</em>, in constrast to the <em>Bayesian approach</em> we discuss below.</p>
-</section>
-</section>
-<section id="l2-regularization" class="level2">
-<h2 class="anchored" data-anchor-id="l2-regularization">2. L2 Regularization</h2>
-<p>We note that the denominator in the Bayes’ theorem does not depend on the parameters <span class="math inline">\(w\)</span> we want to estimate; hence we can ignore that term. We define the unnormalized posterior distribution as</p>
-<p><span class="math display">\[P'(w|{\mathcal D}) = P({\mathcal D}|w) \cdot P(w)\]</span>.</p>
-<p>Let us now see what happens when we introduce prior distribution on parameter <span class="math inline">\(w\)</span>. In the first case, let us assume that <span class="math inline">\(w\)</span> follows a Gaussian distribution <span class="math inline">\({\mathcal N}(w|0, \lambda^{-1})\)</span> where <span class="math inline">\(\lambda\)</span> is a strictly positive scalar. We then have:</p>
-<p><span class="math display">\[P'(w|{\mathcal D}) = \prod_{i = 1}^{N} {\mathcal N}(y_i|f(x_i ; w), \sigma^2) \cdot {\mathcal N}(w|0, \lambda^{-1})\]</span>.</p>
-<p>Taking logarithm on both sides, we obtain:</p>
-<p><span class="math display">\[log P'(w|{\mathcal D}) = \sum_{i = 1}^N \log {\mathcal N}(y_i|f(x_i ; w), \sigma^2) - \lambda w^2 + \text{const}.\]</span></p>
-<p>We can now see how our selection of prior for <span class="math inline">\(w\)</span> as normal distribution results in L2 regularization. In the above equation, <span class="math inline">\(w^2\)</span> is the squared L2-norm of the vector <span class="math inline">\(w\)</span> with <span class="math inline">\(\lambda\)</span> controlling the strength of regularization.</p>
-<p>Often, we seek only a point estimate of <span class="math inline">\(w\)</span> instead of the full posterior distribution. One solution is to take the mode of this posterior as the estimate of <span class="math inline">\(w\)</span>; this approach is called <em>maximum a posteriori</em> (MAP) estimation. MAP estimation differs from MLE in the fact that we incorporate prior knowledge about <span class="math inline">\(w\)</span>.</p>
-</section>
-<section id="l1-regularization" class="level2">
-<h2 class="anchored" data-anchor-id="l1-regularization">3. L1 Regularization</h2>
-<p>We’ll first need to look at a distribution called the Laplace distribution. With <span class="math inline">\(w\)</span> as the random variable, it is given by</p>
-<p><span class="math display">\[ g(w|\mu, b) = \frac{1}{2b} \exp\left(-\frac{|w - \mu|}{b}\right)\]</span></p>
-<p>and <span class="math inline">\(\mu, b\)</span> are referred to as <em>location parameter</em> and <em>diversity</em> respectively.</p>
-<p>Now let us assume that the prior distribution on <span class="math inline">\(w\)</span> is a Laplace distribution with location parameter <span class="math inline">\(\mu = 0\)</span> and <span class="math inline">\(b = \lambda^{-1}\)</span>. The unnormalized posterior distribution in this case becomes:</p>
-<p><span class="math display">\[P'(w|{\mathcal D}) = \prod_{i = 1}^{N} {\mathcal N}(y_i|f(x_i ; w), \sigma^2) \cdot \frac{\lambda}{2} \exp\left(-\lambda |w|\right).\]</span></p>
-<p>Taking logarithm on both sides,</p>
-<p><span class="math display">\[log P'(w|{\mathcal D}) = \sum_{i = 1}^N \log {\mathcal N}(y_i|f(x_i ; w), \sigma^2) - \lambda \cdot |w| + \text{const}.\]</span></p>
-<p>Hence with Laplace distribution as prior on <span class="math inline">\(w\)</span>, we arrive at L1 regularization. Again, <span class="math inline">\(\lambda\)</span> controls the strength of regularization.</p>
+<section id="inconsistent-lock-ordering-deadlock" class="level4">
+<h4 class="anchored" data-anchor-id="inconsistent-lock-ordering-deadlock">Inconsistent Lock Ordering (Deadlock)</h4>
+<p>Helgrind detects inconsistent lock ordering by maintaining a directed graph indicating the order in which locks have been acquired - if there’s a cycle in the graph, Helgrind will report the inconsistent lock ordering. This implies that even if make use of a meta gate-lock, such as <a href="https://gist.github.com/pankajpansari/e9566c5c2a703a8fe33eeb6706b15828#file-deadlock_gate-c">here</a>, to hide the inconsistent lock ordering, Helgrind will still be able to detect the deadlock and will complain. Some may think that it’s a false positive and that Helgrind is not able to operate at a higher-level to figure that the gate lock, in reality, protects the lock ordering. But I think there’s a good reason for Helgrind to still report this - what if there’s some code refactoring and someone decides to get rid of the meta-gate lock <code>g</code>? In any case, one may simply choose to ignore the warning if they are sure about what they’re doing.</p>
+<p><strong>Lock destruction</strong>: The pthreads API provides a function <code>pthread_mutex_destroy</code> to destroy a mutex. Normally it’s a good practice to destroy any mutex or conditional variable we’ve created. If we fail to do so, Helgrind will not complain. For small programs, it isn’t important and even for larger ones it may not be a big deal. However, if the API provides a way to destroy an entity we’ve created, it’s a good practice to use it.</p>
+<hr>
+<p>Code in the associated gist has been borrowed and modified from <em>Operating Systems: Three Easy Pieces</em> by Remzi H. Arpaci-Dusseau and Andrea C. Arpaci-Dusseau. Thanks to Usman, Arbaaz, and Mukundan for the interesting discussion on these topics.</p>
 
 
+</section>
 </section>
 
 </main> <!-- /main -->

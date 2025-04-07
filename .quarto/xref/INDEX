@@ -43,5 +43,8 @@
   },
   "posts/threading-thoughts/index.qmd": {
     "index.html": "dc82a42e"
+  },
+  "posts/helgrind_atomics/index.qmd": {
+    "index.html": "c9396b97"
   }
 }
