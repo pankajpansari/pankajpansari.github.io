@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/einsum/index.html",
       "/posts/helgrind_atomics/index.html",
       "/posts/threading-thoughts/index.html",
       "/posts/inference-profiling/index.html",

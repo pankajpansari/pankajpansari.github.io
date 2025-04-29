@@ -46,5 +46,8 @@
   },
   "posts/helgrind_atomics/index.qmd": {
     "index.html": "c9396b97"
+  },
+  "posts/einsum/index.qmd": {
+    "index.html": "4d4f827e"
   }
 }
