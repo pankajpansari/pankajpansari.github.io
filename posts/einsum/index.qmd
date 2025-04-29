@@ -1,9 +1,9 @@
 ---
 title:  "Elegant Tensors: Attention Forward & Backward Passes using PyTorch Einsum/Einops"
-date:  "2025-04-26"
+date:  "2025-04-29"
 author: "Pankaj Pansari"
 ---
-I was looking at the FlashAttention-2 paper recently. It's about optimizing the forward and backward pass through the attention layer - this being the bottleneck to scaling transformers for longer sequence lengths. As a start, I implemented the forward and backward passes of the standard (unoptimized) attention module in PyTorch but with `einsum` and `einops` instead of `view`, `reshape`, `transpose`, `permute`, and `matmul` which I habitually use. 
+I was looking at the FlashAttention-2 [paper](https://arxiv.org/pdf/2307.08691) recently. It's about optimizing the forward and backward pass through the attention layer - this being the bottleneck to scaling transformers for longer sequence lengths. As a start, I implemented the forward and backward passes of the standard (unoptimized) attention module in PyTorch but with `einsum` and `einops` instead of `view`, `reshape`, `transpose`, `permute`, and `matmul` which I habitually use. 
 
 ### Einsum and Einops
 
@@ -27,7 +27,7 @@ torch.einsum('i,ij -> i', A, B)
 
 ### Implementing Attention Forward Pass using Einsum/Einops
 
-Consider the implementation of standard single-head attention from here:
+Consider the implementation of standard single-head attention from [here](https://nlp.seas.harvard.edu/annotated-transformer/):
 
 ```python
 def attention(query, key, value, mask=None, dropout=None):
@@ -103,10 +103,10 @@ where $\operatorname{dot\_prod} = \sum_k P[i, k] * dP[i, k]$ is the dot product 
 In summary, we implemented forward and backward passes of standard attention module as an exercise in using `einsum` and `einops`, and also because it provides us a starting point for hardware optimizations to speed up attention for long context lengths. Along the way, we saw that tensor formulation of backprop through `softmax` needed some matrix manipulations.
 
 :::{.callout-note}
-Backpropagation is amazing since it lets us reuse computation, resulting in gradient computation expense comparable to forward pass (within a constant factor). Autograd is great since it speeds up implementation by freeing us from the need to write gradient code. However, notice how autograd required saving intermediate computational states (in our example, we saved the {\bf P} matrix; see notebook). That's a load on limited GPU memory.
+Backpropagation is amazing since it lets us reuse computation, resulting in gradient computation expense comparable to forward pass (within a constant factor). Autograd is great since it speeds up implementation by freeing us from the need to write gradient code. However, notice how autograd required saving intermediate computational states (in our example, we saved the $\bf P$ matrix; see notebook). That's a load on limited GPU memory.
 
 A fun exercise: why do you think topological sort is needed during backprop?
 :::
 
 ---
-*Thanks to Eric for introduction to new concepts. 
+*Thanks to Eric for introduction to new concepts.*

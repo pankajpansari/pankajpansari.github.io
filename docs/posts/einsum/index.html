@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Pankaj Pansari">
-<meta name="dcterms.date" content="2025-04-26">
+<meta name="dcterms.date" content="2025-04-29">
 
 <title>Elegant Tensors: Attention Forward &amp; Backward Passes using PyTorch Einsum/Einops – Blog</title>
 <style>
@@ -195,7 +195,7 @@ window.Quarto = {
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">April 26, 2025</p>
+        <p class="date">April 29, 2025</p>
       </div>
     </div>
     
@@ -214,7 +214,7 @@ window.Quarto = {
 
 
 
-<p>I was looking at the FlashAttention-2 paper recently. It’s about optimizing the forward and backward pass through the attention layer - this being the bottleneck to scaling transformers for longer sequence lengths. As a start, I implemented the forward and backward passes of the standard (unoptimized) attention module in PyTorch but with <code>einsum</code> and <code>einops</code> instead of <code>view</code>, <code>reshape</code>, <code>transpose</code>, <code>permute</code>, and <code>matmul</code> which I habitually use.</p>
+<p>I was looking at the FlashAttention-2 <a href="https://arxiv.org/pdf/2307.08691">paper</a> recently. It’s about optimizing the forward and backward pass through the attention layer - this being the bottleneck to scaling transformers for longer sequence lengths. As a start, I implemented the forward and backward passes of the standard (unoptimized) attention module in PyTorch but with <code>einsum</code> and <code>einops</code> instead of <code>view</code>, <code>reshape</code>, <code>transpose</code>, <code>permute</code>, and <code>matmul</code> which I habitually use.</p>
 <section id="einsum-and-einops" class="level3">
 <h3 class="anchored" data-anchor-id="einsum-and-einops">Einsum and Einops</h3>
 <p>I found <code>einsum</code> and <code>einops</code> to be very useful and elegant for working on tensors - a core requirement of deep learning. One ends up writing more readable and less error-prone PyTorch code with <code>einsum</code> (based on Einstein summation) and <code>einops</code> (general tensor manipulation using Einstein notation). Moreover, <code>einsum</code> + <code>einops</code> can lead to faster and more memory-efficient implementations, especially by potentially fusing operations; however, I need to investigate the efficient part more.</p>
@@ -227,7 +227,7 @@ window.Quarto = {
 </section>
 <section id="implementing-attention-forward-pass-using-einsumeinops" class="level3">
 <h3 class="anchored" data-anchor-id="implementing-attention-forward-pass-using-einsumeinops">Implementing Attention Forward Pass using Einsum/Einops</h3>
-<p>Consider the implementation of standard single-head attention from here:</p>
+<p>Consider the implementation of standard single-head attention from <a href="https://nlp.seas.harvard.edu/annotated-transformer/">here</a>:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> attention(query, key, value, mask<span class="op">=</span><span class="va">None</span>, dropout<span class="op">=</span><span class="va">None</span>):</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"Compute 'Scaled Dot Product Attention'"</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    d_k <span class="op">=</span> query.size(<span class="op">-</span><span class="dv">1</span>)</span>
@@ -282,12 +282,12 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Backpropagation is amazing since it lets us reuse computation, resulting in gradient computation expense comparable to forward pass (within a constant factor). Autograd is great since it speeds up implementation by freeing us from the need to write gradient code. However, notice how autograd required saving intermediate computational states (in our example, we saved the {} matrix; see notebook). That’s a load on limited GPU memory.</p>
+<p>Backpropagation is amazing since it lets us reuse computation, resulting in gradient computation expense comparable to forward pass (within a constant factor). Autograd is great since it speeds up implementation by freeing us from the need to write gradient code. However, notice how autograd required saving intermediate computational states (in our example, we saved the <span class="math inline">\(\bf P\)</span> matrix; see notebook). That’s a load on limited GPU memory.</p>
 <p>A fun exercise: why do you think topological sort is needed during backprop?</p>
 </div>
 </div>
 <hr>
-<p>*Thanks to Eric for introduction to new concepts.</p>
+<p><em>Thanks to Eric for introduction to new concepts.</em></p>
 
 
 </section>
