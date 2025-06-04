@@ -2,14 +2,14 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.551">
+<meta name="generator" content="quarto-1.6.43">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Pankaj Pansari">
 <meta name="dcterms.date" content="2025-01-07">
 
-<title>Blog -</title>
+<title>Automated Qualitative Feedback on Programming Assignments – Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -37,10 +37,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-d4d76bf8491c20bad77d141916dc28e1.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-c3d4629bfb50025cf60797e0358bd0d3.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -85,7 +85,7 @@ ul.task-list li input[type="checkbox"] {
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -106,7 +106,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -115,7 +115,7 @@ ul.task-list li input[type="checkbox"] {
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      
+      <h1 class="title">Automated Qualitative Feedback on Programming Assignments</h1>
                       </div>
   </div>
     
@@ -152,12 +152,31 @@ ul.task-list li input[type="checkbox"] {
 
 
 <div style="text-align: justify">
+<p>I’ve been teaching courses on Computer Systems and Operating Systems at Plaksha University. Programming assignments are an integral part of such systems courses. The challenge comes in evaluating the large number of submissions. One can write scripts to score the correctness of code, perhaps by test cases; even performance measures such as execution time or cache memory hits/misses can be easily captured. The harder part is giving feedback on the quality of the code. Usually, TAs annotate the submission indicating how readable or well-organized the program is and whether it makes use of good language conventions. This calls for good programming expertise from the TAs themselves; a lot of effort is also required to give such feedback for a large class.</p>
+<p>I wrote a tool called <a href="https://github.com/pankajpansari/code_insight?tab=readme-ov-file">CodeInsight</a> to provide such feedback automatically. It makes use of a suite of state-of-the-art LLMs in an agent-based architecture. Given a problem statement and an assignment program, the tool returns an annotated version of the program, inserting comments at appropriate points, either to suggest improvement or to commend good implementation; the original code remains as it is. The parameters are cleanliness, language conventions, organization, data structures, and use of pointers (for C). It goes without saying that program correctness comes first and foremost; this tool does not check for that.</p>
+<p>While state-of-the-art models are good at code understanding, they do make mistakes. If let’s say Claude-3.5-Sonnet is asked to provide feedback in our desired format, three cases can arise:</p>
+<ol type="1">
+<li>provides the correct feedback at the appropriate point</li>
+<li>provides feedback at some point, but that isn’t quite correct or relevant. For instance, it may suggest some optimization that may be valid but isn’t required as part of the assignment</li>
+<li>fails to identify a bad practice where it actually occurs</li>
+</ol>
+<p>Besides, different LLMs have different strengths. ChatGPT 4.0 may correctly pick up some points that Claude missed.</p>
+<p>Considering these, it seemed appropriate to me to use an agent-based approach. Specifically, I used a multi-agent collaboration design pattern. Andrew Ng <a href="https://www.deeplearning.ai/the-batch/how-agents-can-improve-llm-performance/">puts the idea succinctly</a>: “More than one AI agent work together, splitting up tasks and discussing and debating ideas, to come up with better solutions than a single agent would”. The architecture looks like the following:</p>
+<figure class="figure">
+<img src="system_diagram.jpg" class="center figure-img" alt="A figure" width="700" height="400">
+<figcaption>
+Fig. 1 - CodeInsight architecture
+</figcaption>
+</figure>
+<p>Proposers, aggregators, annotators, and comparators are role names given to LLMs hinting the function they carry out. More details can be found in the home page of the GitHub repository. I’d just like to mention that there are actually 4 proposers (rather than 3 in the figure) and they are distinct models - Claude-3.5-Sonnet, GPT-4o, Mixtral-8x22B, and Llama-3.1-405B. Also in the spirit of breaking down tasks, the proposer-aggregator loop is run once for every evaluation parameter - readability, organization, language convention, etc. Finally, I found that it was critical for the prompts to be detailed and accurate. I made use of <a href="https://web.stanford.edu/class/archive/cs/cs107/cs107.1166/advice_assigngrade.html">this</a> excellent documentation on programming assignment grading from a Stanford course.</p>
+<p>There are two challenges with such an agent-based approach - overall system latency and API costs. The first is not an issue for us since we use the tool offline on a batch of assignments. The cost can be a concern when the number of assignments is large. I don’t have cost estimates yet, but I felt it was important to first make the tool output as good as we can. I have yet to check the degradation of performance if we use, let’s say, 2 proposers instead of 4, or the latest suite of smaller models.</p>
+<p>The fun part was the system evaluation. I wanted to compare the tool output with sample programs annotated by a good programmer. For the sample programs, I selected 10 C programs written by not-expert programmers (the programs should have scope for us to suggest feedback). I requested two of my good students to annotate those programs with feedback, and also ran the tool on the programs. I let GPT-4o do the comparison and provide a 0 or 1 score based on which of two inputs - tool or human annotation - is better (the comparison prompt was more elaborate). I computed the average win-ratio of the tool for each student. Averaged over both programmers, the win ratio was 5-5. This was encouraging.</p>
+<p>Although our tool goes beyond what traditional linters do, it’ll be helpful to incorporate linter output and provide them as part of prompts to proposers. I’d like to do a more exhaustive human comparison testing on more C programs. Once I use it for some assignments in my course, hopefully students’ feedback will give me pointers to improve the tool.</p>
 
-<p>The courses I’m teaching at Plaksha University require the students to work on a good number of programming assignments relating to computer systems.</p>
 
+</div>
 
-
-</div></main> <!-- /main -->
+</main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
@@ -193,18 +212,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -236,7 +244,27 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp("https:\/\/pankajpansari\.github\.io\/");
@@ -244,7 +272,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {
@@ -341,7 +369,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

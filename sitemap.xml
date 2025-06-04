@@ -1,39 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://pankajpansari.github.io/posts/Transformers-intro/index.html</loc>
-    <lastmod>2025-01-07T05:11:55.086Z</lastmod>
-  </url>
-  <url>
-    <loc>https://pankajpansari.github.io/posts/ML-research-vs-production/index.html</loc>
-    <lastmod>2025-01-07T05:11:55.043Z</lastmod>
-  </url>
-  <url>
-    <loc>https://pankajpansari.github.io/posts/Grounding-LLMs/index.html</loc>
-    <lastmod>2025-01-07T05:11:54.873Z</lastmod>
-  </url>
-  <url>
-    <loc>https://pankajpansari.github.io/posts/Bayesian-inference/index.html</loc>
-    <lastmod>2025-01-07T05:11:54.831Z</lastmod>
-  </url>
-  <url>
-    <loc>https://pankajpansari.github.io/about.html</loc>
-    <lastmod>2025-01-07T05:11:53.420Z</lastmod>
-  </url>
-  <url>
-    <loc>https://pankajpansari.github.io/index.html</loc>
-    <lastmod>2025-01-07T05:11:54.812Z</lastmod>
-  </url>
-  <url>
-    <loc>https://pankajpansari.github.io/posts/Code_insight/index.html</loc>
-    <lastmod>2025-01-07T05:11:56.523Z</lastmod>
+    <loc>https://pankajpansari.github.io/posts/threading-thoughts/index.html</loc>
+    <lastmod>2025-03-27T10:45:14.581Z</lastmod>
   </url>
   <url>
     <loc>https://pankajpansari.github.io/posts/LLM-intro/index.html</loc>
     <lastmod>2025-01-07T05:11:54.987Z</lastmod>
   </url>
   <url>
-    <loc>https://pankajpansari.github.io/posts/Painting-classifier/index.html</loc>
-    <lastmod>2025-01-07T05:11:55.071Z</lastmod>
+    <loc>https://pankajpansari.github.io/posts/helgrind_atomics/index.html</loc>
+    <lastmod>2025-04-07T10:42:08.374Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pankajpansari.github.io/posts/einsum/index.html</loc>
+    <lastmod>2025-04-30T09:51:12.386Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pankajpansari.github.io/posts/code-critique/index.html</loc>
+    <lastmod>2025-06-04T09:04:58.848Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pankajpansari.github.io/index.html</loc>
+    <lastmod>2025-06-03T16:15:57.188Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pankajpansari.github.io/about.html</loc>
+    <lastmod>2025-04-29T06:48:12.700Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pankajpansari.github.io/posts/Bayesian-inference/index.html</loc>
+    <lastmod>2025-03-27T09:42:43.975Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pankajpansari.github.io/posts/Code_insight/index.html</loc>
+    <lastmod>2025-01-08T06:58:11.359Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pankajpansari.github.io/posts/Grounding-LLMs/index.html</loc>
+    <lastmod>2025-01-07T05:11:54.873Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pankajpansari.github.io/posts/inference-profiling/index.html</loc>
+    <lastmod>2025-03-25T18:20:52.343Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pankajpansari.github.io/posts/ML-research-vs-production/index.html</loc>
+    <lastmod>2025-01-07T05:11:55.043Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pankajpansari.github.io/posts/paradoxes/index.html</loc>
+    <lastmod>2025-05-01T10:25:44.649Z</lastmod>
+  </url>
+  <url>
+    <loc>https://pankajpansari.github.io/posts/throughtput_latency/index.html</loc>
+    <lastmod>2025-03-25T07:10:55.755Z</lastmod>
   </url>
 </urlset>
