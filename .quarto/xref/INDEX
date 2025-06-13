@@ -55,5 +55,8 @@
   },
   "posts/code-critique/index.md": {
     "index.html": "5fe3a10e"
+  },
+  "posts/cuda_vector_add/index.md": {
+    "index.html": "1cf3e07a"
   }
 }

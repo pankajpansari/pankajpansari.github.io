@@ -1,5 +1,5 @@
 ---
-title:  "Elegant Tensors: Attention Forward & Backward Passes using PyTorch Einsum/Einops"
+title:  "Attention Forward & Backward Passes using PyTorch Einsum/Einops"
 date:  "2025-04-29"
 author: "Pankaj Pansari"
 ---

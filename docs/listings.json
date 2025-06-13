@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/cuda_vector_add/index.html",
       "/posts/code-critique/index.html",
       "/posts/paradoxes/index.html",
       "/posts/einsum/index.html",

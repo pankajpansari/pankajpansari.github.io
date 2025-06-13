@@ -16,7 +16,7 @@ about:
 
 ---
 <div style="text-align: justify"> 
-I am a Visiting Faculty member in the Computer Science and Artificial Intelligence division of Plaksha University, where I teach courses on Computer Systems and Operating Systems. My current research interests lie in benchmarking reasoning abilities of LLMs.
+I am an Assistant Professor in the Computer Science and Artificial Intelligence division of Plaksha University, where I teach courses on Computer Systems and Operating Systems. My current research interests lie in benchmarking reasoning abilities of LLMs and on speeding up inference and training of LLMs.
 
 I completed my PhD under Dr. Pawan Mudigonda in the OVAL group at University of Oxford, where I worked on optimization problems arising in machine learning. I've been a Research Scientist at Naver Labs Europe in Grenoble, France. I also worked as a Data Analyst at General Electric in Bangalore, India.
 

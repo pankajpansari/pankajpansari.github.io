@@ -1,5 +1,6 @@
 ---
-title:  "code-critique - LLM-based tool for automated feedback on code quality"
+title:  "code-critique"
+description: "LLM-based tool for automated feedback on code quality"
 date:  "2025-06-04"
 author: "Pankaj Pansari"
 ---
@@ -31,8 +32,8 @@ implementing a system call in an educational OS (like xv6).
 ### Why not just use a linter?
 
 Both **code-critique** and linter are static code-analysis tool. Linters
-check for adhere to language convention and also flag possible bugs or
-security issues, so it addresses part of our aim. However, linters are
+check for adherence to language convention and also flag possible bugs or
+security issues, so they address part of our aim. However, linters are
 rule-based and struggle with pointing out issues in design of program
 and whether descriptive comments and names are being used. The biggest
 issue is that linters don't take into account the problem statement into

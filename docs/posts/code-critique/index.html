@@ -8,8 +8,9 @@
 
 <meta name="author" content="Pankaj Pansari">
 <meta name="dcterms.date" content="2025-06-04">
+<meta name="description" content="LLM-based tool for automated feedback on code quality">
 
-<title>code-critique - LLM-based tool for automated feedback on code quality – Blog</title>
+<title>code-critique – Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -149,8 +150,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">code-critique - LLM-based tool for automated feedback on code quality</h1>
-                      </div>
+      <h1 class="title">code-critique</h1>
+                  <div>
+        <div class="description">
+          LLM-based tool for automated feedback on code quality
+        </div>
+      </div>
+                </div>
   </div>
     
   
@@ -194,7 +200,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="why-not-just-use-a-linter" class="level3">
 <h3 class="anchored" data-anchor-id="why-not-just-use-a-linter">Why not just use a linter?</h3>
-<p>Both <strong>code-critique</strong> and linter are static code-analysis tool. Linters check for adhere to language convention and also flag possible bugs or security issues, so it addresses part of our aim. However, linters are rule-based and struggle with pointing out issues in design of program and whether descriptive comments and names are being used. The biggest issue is that linters don’t take into account the problem statement into consideration. This is not to say that linters cannot help us; in fact, we integrate <code>clang-tidy</code> output in our pipeline.</p>
+<p>Both <strong>code-critique</strong> and linter are static code-analysis tool. Linters check for adherence to language convention and also flag possible bugs or security issues, so they address part of our aim. However, linters are rule-based and struggle with pointing out issues in design of program and whether descriptive comments and names are being used. The biggest issue is that linters don’t take into account the problem statement into consideration. This is not to say that linters cannot help us; in fact, we integrate <code>clang-tidy</code> output in our pipeline.</p>
 </section>
 <section id="design-choices" class="level3">
 <h3 class="anchored" data-anchor-id="design-choices">Design Choices</h3>
