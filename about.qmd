@@ -6,12 +6,12 @@ about:
 ---
 
 <div style="text-align: justify"> 
-I am an Assistant Professor in the Computer Science and Artificial Intelligence division of Plaksha University, where I teach courses on Computer Systems and Operating Systems. My research interests lie in improving reasoning abilities of LLMs and on speeding up inference and training of LLMs.
+I am an Assistant Professor in the Computer Science and Artificial Intelligence division of Plaksha University, where I teach courses on Operating Systems and ML Systems. My research interests lie in improving reasoning abilities of LLMs and on speeding up inference and training of LLMs.
 
-I completed my PhD under Dr. Pawan Mudigonda in the OVAL group at University of Oxford, where I worked on optimization problems arising in machine learning. Post-PhD, I was a Research Scientist at Naver Labs Europe in Grenoble, France. I also worked as Data Analyst at General Electric in Bangalore, India.
-
-I completed my undergraduate studies at the Indian Institute of Technology, Kharagpur.
+I completed my PhD under Dr. Pawan Mudigonda in the OVAL group at University of Oxford, where I worked on optimization problems arising in machine learning. Post-PhD, I was a Research Scientist at Naver Labs Europe in Grenoble, France. I also worked as Data Analyst at General Electric in Bangalore, India. I completed my undergraduate studies at the Indian Institute of Technology, Kharagpur.
     
+I am teaching [ML Systems](https://ai4103-mlsys.github.io/) at Plaksha University during Monsoon, 2025. I wrote [code-critique](https://github.com/pankajpansari/code-critique), a tool for giving automated feedback on implementation quality of programming assignments; I've found it useful for my own courses.
+
 **Email**: pankaj.pansari1@proton.me
 </div>
 
