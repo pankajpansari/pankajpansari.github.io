@@ -2,6 +2,7 @@
 title: A Probabilistic Perspective on Regularization 
 date:  "2023-11-08"
 author: "Pankaj Pansari"
+draft: true
 ---
 
 Regularization is a common technique in machine learning to prevent overfitting. The two most widely used regularizers are the L2 and L1 norms. In this post, we look at how there regularizers can be thought of as being derived from prior distributions on the parameters we're estimating.

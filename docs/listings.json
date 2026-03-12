@@ -2,6 +2,7 @@
   {
     "listing": "/index.html",
     "items": [
+      "/posts/programming_theory_building/index.html",
       "/posts/cuda_vector_add/index.html",
       "/posts/code-critique/index.html",
       "/posts/paradoxes/index.html",
