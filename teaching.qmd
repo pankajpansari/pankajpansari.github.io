@@ -1,0 +1,22 @@
+**Courses @ Plaksha** :
+
+1. Operating Systems, Spring semester, 2026
+
+> We study OS, focusing on the themes of virtualization (cpu and memory), concurrency, and persistence. We broadly follow the excellent textbook "[OS: Three Easy Pieces](https://pages.cs.wisc.edu/~remzi/OSTEP/)". We also look at xv6 kernel to see how abstract OS concepts are implemented in code.
+
+2. Machine Learning Systems, Monsoon semester, 2026
+
+> We looked at techniques for efficient inference and training of LLMs so that they make good use of hardware resources. Lecture videos, slides, and reading materials are available at https://ai4103-mlsys.github.io/
+
+3. Operating Systems, Spring semester, 2025
+
+> Same topics as above. For this course, I wrote a tool called [code-critique](https://github.com/pankajpansari/code-critique) that gives automated feedback on implementation quality of programming assignments.
+
+4. Foundations of Computer Systems, Monsoon semester, 2024
+
+> We looked at the essential concepts a programmer needs to know about computer architecture and operating systems to write correct and efficient programs. We use the very readable textbook "[Computer Systems: A Programmer's Perspective](https://csapp.cs.cmu.edu/)".
+
+5. Data Mining, Spring semester, 2024
+
+> We discussed databases, data visualization, foundational techniques for data analysis and statistical testing, graph data processing.
+

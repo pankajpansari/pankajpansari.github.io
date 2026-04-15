@@ -67,5 +67,8 @@
   },
   "publications.qmd": {
     "publications.html": "c69c881f"
+  },
+  "teaching.qmd": {
+    "teaching.html": "285c6572"
   }
 }

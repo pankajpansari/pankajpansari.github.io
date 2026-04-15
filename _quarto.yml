@@ -9,6 +9,8 @@ website:
         href: index.qmd 
       - text: "Publications"
         href: publications.qmd
+      - text: "Teaching"
+        href: teaching.qmd
       - text: "Blog"
         href: posts.qmd 
 
@@ -16,3 +18,4 @@ format:
   html:
     theme: cosmo
     css: styles.css
+    toc: true
