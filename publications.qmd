@@ -1,0 +1,11 @@
+---
+title: "Publications"
+---
+
+1. "Linear Programming-based Submodular Extensions for Marginal Estimation", **Pankaj Pansari**, Chris Russell, and M. Pawan Kumar, *Computer Vision and Image Understanding*, 2019 [PDF](./papers/Pansari2019_CVIU_LPExtensions.pdf)  
+
+2. "Worst-case Optimal Submodular Extensions for Marginal Estimation", **Pankaj Pansari**, Chris Russell, and M. Pawan Kumar, *AISTATS*, 2018 [PDF](./papers/Pansari2018_AISTATS_WorstCaseExtension.pdf)  
+
+3. "Truncated Max-of-Convex Models", **Pankaj Pansari** and M. Pawan Kumar, *CVPR*, 2017 [arXiv](https://arxiv.org/abs/1512.07815)  
+
+4. "Grouping Entities in a Fleet by Community Detection in Network of Regression Models", **Pankaj Pansari**, C. Rajagopalan, Ramasubramanian Sundararajan, *3rd International Conference on Business Analytics and Intelligence*, 2015 [arXiv](https://arxiv.org/abs/1501.04281)

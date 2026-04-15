@@ -58,5 +58,14 @@
   },
   "posts/cuda_vector_add/index.md": {
     "index.html": "1cf3e07a"
+  },
+  "posts/programming_theory_building/index.md": {
+    "index.html": "9dd4a367"
+  },
+  "posts.qmd": {
+    "posts.html": "33289f85"
+  },
+  "publications.qmd": {
+    "publications.html": "c69c881f"
   }
 }

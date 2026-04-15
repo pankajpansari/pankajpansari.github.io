@@ -3,6 +3,7 @@ title:  "Vector Addition - A First Look at CUDA"
 description: "A simple program let's us learn a surprising amount about CUDA and GPU"
 date:  "2025-06-12"
 author: "Pankaj Pansari"
+draft: true
 ---
 
 In this blog post, we'll write a simple CUDA program to add up elements from 2 arrays on the GPU.

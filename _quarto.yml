@@ -3,14 +3,15 @@ project:
   output-dir: docs
 
 website:
-  title: "Blog"
   navbar:
-    right:
-      - about.qmd
-      - icon: github
-        href: https://github.com/
-      - icon: twitter
-        href: https://twitter.com
+    left:
+      - text: "Home"
+        href: index.qmd 
+      - text: "Publications"
+        href: publications.qmd
+      - text: "Blog"
+        href: posts.qmd 
+
 format:
   html:
     theme: cosmo

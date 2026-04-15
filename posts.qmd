@@ -1,0 +1,16 @@
+---
+title: "Blog"
+listing:
+  contents: posts
+  sort: "date desc"
+  type: table
+  fields: [date, title]
+  date-format: "MMM YYYY"
+  table-striped: false
+  sort-ui: false
+  filter-ui: false
+page-layout: full
+title-block-banner: true
+---
+
+
