@@ -3,7 +3,6 @@
     "listing": "/posts.html",
     "items": [
       "/posts/programming_theory_building/index.html",
-      "/posts/cuda_vector_add/index.html",
       "/posts/code-critique/index.html",
       "/posts/paradoxes/index.html",
       "/posts/einsum/index.html",
@@ -13,11 +12,7 @@
       "/posts/throughtput_latency/index.html",
       "/posts/Code_insight/index.html",
       "/posts/Grounding-LLMs/index.html",
-      "/posts/Bayesian-inference/index.html",
-      "/posts/ML-research-vs-production/index.html",
-      "/posts/LLM-intro/index.html",
-      "/posts/Painting-classifier/index.html",
-      "/posts/Transformers-intro/index.html"
+      "/posts/ML-research-vs-production/index.html"
     ]
   }
 ]
