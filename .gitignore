@@ -13,3 +13,5 @@ docs/index.html
 docs/listings.json
 docs/search.json
 .quarto/xref/INDEX
+
+**/*.quarto_ipynb

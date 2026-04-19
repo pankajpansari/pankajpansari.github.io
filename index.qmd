@@ -5,4 +5,6 @@ I am an Assistant Professor in the Computer Science and Artificial Intelligence 
 
 I completed my PhD under Dr. Pawan Mudigonda in the OVAL group at University of Oxford, where I worked on optimization problems arising in machine learning. Post-PhD, I was a Research Scientist at Naver Labs Europe in Grenoble, France. I also worked as Data Analyst at General Electric in Bangalore, India. I completed my undergraduate studies at the Indian Institute of Technology, Kharagpur.
     
+[CV](./papers/CV.pdf)
+
 **Email**: pankaj dot pansari at plaksha.edu.in 
